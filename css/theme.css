@@ -1,0 +1,567 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --amber: #ffb000;
+  --amber-dim: #a07000;
+  --amber-glow: #ffcc44;
+  --bg: #0a0800;
+  --bg-panel: #110e00;
+  --bg-card: #1a1500;
+  --border: #3a2f00;
+  --success: #44ff44;
+  --error: #ff4444;
+  --info: #44aaff;
+  --scanline-opacity: 0.03;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--amber);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* CRT scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,var(--scanline-opacity)) 2px,
+    rgba(0,0,0,var(--scanline-opacity)) 4px
+  );
+}
+
+/* Phosphor glow on text */
+h1, h2, h3, .glow {
+  text-shadow: 0 0 8px var(--amber), 0 0 16px var(--amber-dim);
+}
+
+a {
+  color: var(--amber-glow);
+  text-decoration: none;
+}
+a:hover {
+  text-shadow: 0 0 8px var(--amber-glow);
+  text-decoration: underline;
+}
+
+/* ── NES.css overrides ── */
+.nes-container {
+  background: var(--bg-panel) !important;
+  border-color: var(--border) !important;
+  color: var(--amber) !important;
+}
+
+.nes-container.is-dark {
+  background: var(--bg) !important;
+}
+
+.nes-container.with-title > .title {
+  background: var(--bg) !important;
+  color: var(--amber-glow) !important;
+  text-shadow: 0 0 6px var(--amber);
+}
+
+.nes-btn {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 9px !important;
+  background: var(--bg-card) !important;
+  color: var(--amber) !important;
+  border-color: var(--amber-dim) !important;
+}
+
+.nes-btn:hover, .nes-btn:focus {
+  background: var(--amber-dim) !important;
+  color: var(--bg) !important;
+}
+
+.nes-btn.is-primary {
+  background: var(--amber-dim) !important;
+  color: var(--bg) !important;
+  border-color: var(--amber) !important;
+}
+.nes-btn.is-primary:hover {
+  background: var(--amber) !important;
+  box-shadow: 0 0 12px var(--amber);
+}
+
+.nes-btn.is-success {
+  background: #003300 !important;
+  color: var(--success) !important;
+  border-color: var(--success) !important;
+}
+
+.nes-btn.is-error {
+  background: #330000 !important;
+  color: var(--error) !important;
+  border-color: var(--error) !important;
+}
+
+.nes-progress {
+  background: var(--bg-card) !important;
+}
+.nes-progress::-webkit-progress-value {
+  background: var(--amber) !important;
+  box-shadow: 0 0 6px var(--amber);
+}
+.nes-progress::-moz-progress-bar {
+  background: var(--amber) !important;
+}
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ── Header ── */
+.site-header {
+  text-align: center;
+  padding: 32px 16px 24px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+.site-header h1 {
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin: 0 0 12px;
+}
+.site-header .subtitle {
+  font-size: 8px;
+  color: var(--amber-dim);
+}
+
+/* ── Boot sequence ── */
+#boot-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1000;
+  padding: 32px;
+}
+#boot-screen pre {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  text-shadow: 0 0 8px var(--amber);
+  white-space: pre;
+  line-height: 2;
+}
+#boot-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 14px;
+  background: var(--amber);
+  vertical-align: bottom;
+  animation: blink 0.8s step-end infinite;
+  box-shadow: 0 0 6px var(--amber);
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Progress bar area ── */
+.progress-area {
+  margin-bottom: 32px;
+}
+.progress-label {
+  font-size: 9px;
+  margin-bottom: 8px;
+  color: var(--amber-dim);
+}
+.progress-label span {
+  color: var(--amber-glow);
+}
+
+/* ── Problem grid ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.problem-card {
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  display: block;
+  color: var(--amber);
+}
+.problem-card:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 12px var(--amber-dim);
+  text-decoration: none;
+}
+.problem-card.completed {
+  border-color: var(--amber);
+  background: #1a1200;
+}
+
+.card-num {
+  font-size: 8px;
+  color: var(--amber-dim);
+  margin-bottom: 6px;
+}
+.card-title {
+  font-size: 9px;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.card-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.badge {
+  font-size: 7px;
+  padding: 2px 5px;
+  border: 1px solid var(--border);
+  color: var(--amber-dim);
+}
+.badge.beginner   { border-color: #44ff44; color: #44ff44; }
+.badge.intermediate { border-color: var(--amber); color: var(--amber); }
+.badge.advanced   { border-color: #ff4444; color: #ff4444; }
+.badge.type       { border-color: var(--info); color: var(--info); }
+
+.star {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--amber);
+  text-shadow: 0 0 6px var(--amber);
+}
+
+/* ── Topic section headers ── */
+.topic-header {
+  font-size: 10px;
+  color: var(--amber-glow);
+  border-left: 4px solid var(--amber);
+  padding-left: 10px;
+  margin: 32px 0 16px;
+  text-shadow: 0 0 6px var(--amber);
+}
+
+/* ── Problem page ── */
+.problem-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .problem-layout { grid-template-columns: 1fr; }
+}
+
+.problem-description {
+  font-size: 9px;
+  line-height: 2;
+}
+.problem-description code {
+  background: var(--bg-card);
+  padding: 1px 4px;
+  color: var(--amber-glow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+}
+.problem-description pre {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 10px;
+  overflow-x: auto;
+  font-size: 8px;
+  line-height: 1.8;
+  color: var(--amber-glow);
+}
+
+/* ── Code editor ── */
+.editor-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#code-editor {
+  width: 100%;
+  min-height: 220px;
+  background: var(--bg);
+  color: var(--amber-glow);
+  border: 2px solid var(--border);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  line-height: 1.8;
+  padding: 12px;
+  resize: vertical;
+  outline: none;
+  tab-size: 4;
+}
+#code-editor:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 8px var(--amber-dim);
+}
+
+/* ── Terminal output ── */
+.terminal {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  line-height: 1.8;
+  padding: 12px;
+  min-height: 120px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--amber-glow);
+}
+.terminal .t-prompt {
+  color: var(--amber-dim);
+}
+.terminal .t-error {
+  color: var(--error);
+}
+.terminal .t-success {
+  color: var(--success);
+}
+.terminal .t-info {
+  color: var(--info);
+}
+
+/* ── Test results ── */
+.test-result-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 4px 0;
+  font-size: 8px;
+  line-height: 1.8;
+}
+.test-icon { flex-shrink: 0; }
+.test-pass .test-icon { color: var(--success); }
+.test-fail .test-icon { color: var(--error); }
+.test-name { color: var(--amber-dim); word-break: break-all; }
+.test-msg  { color: var(--amber-dim); font-size: 7px; }
+
+/* ── Code reveal dialog ── */
+.code-reveal {
+  text-align: center;
+  padding: 20px;
+}
+.code-reveal .big-code {
+  font-size: 18px;
+  color: var(--amber-glow);
+  text-shadow: 0 0 16px var(--amber);
+  letter-spacing: 4px;
+  display: block;
+  margin: 16px 0;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { text-shadow: 0 0 8px var(--amber), 0 0 20px var(--amber-dim); }
+  50%       { text-shadow: 0 0 20px var(--amber), 0 0 40px var(--amber); }
+}
+
+/* ── MCQ ── */
+.mcq-question {
+  margin-bottom: 20px;
+}
+.mcq-question p {
+  font-size: 9px;
+  margin-bottom: 10px;
+}
+.mcq-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0;
+  cursor: pointer;
+  font-size: 8px;
+  line-height: 1.8;
+}
+.mcq-option input[type="radio"] {
+  margin-top: 2px;
+  accent-color: var(--amber);
+  flex-shrink: 0;
+}
+.mcq-option.correct { color: var(--success); }
+.mcq-option.wrong   { color: var(--error); }
+
+/* ── Parsons puzzle ── */
+.parsons-area {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.parsons-bank, .parsons-solution {
+  flex: 1;
+  min-width: 200px;
+}
+.parsons-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  margin: 4px 0;
+  font-size: 8px;
+  cursor: grab;
+  user-select: none;
+  white-space: pre;
+  color: var(--amber-glow);
+}
+.parsons-block:active { cursor: grabbing; }
+.parsons-block.drag-over { border-color: var(--amber); }
+.parsons-solution .parsons-block { background: #110e00; }
+
+.parsons-slot {
+  min-height: 32px;
+  border: 1px dashed var(--border);
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+/* ── Nav breadcrumb ── */
+.breadcrumb {
+  font-size: 8px;
+  color: var(--amber-dim);
+  margin-bottom: 20px;
+}
+.breadcrumb a { color: var(--amber-dim); }
+.breadcrumb a:hover { color: var(--amber); }
+
+/* ── Buttons row ── */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Pyodide loading ── */
+.loading-bar {
+  font-size: 8px;
+  color: var(--amber-dim);
+  margin-top: 6px;
+}
+.loading-bar span {
+  display: inline-block;
+  animation: dots 1.5s steps(3, end) infinite;
+}
+@keyframes dots {
+  0%   { content: '.'; }
+  33%  { content: '..'; }
+  66%  { content: '...'; }
+  100% { content: ''; }
+}
+
+/* ── Validate page ── */
+.validate-results {
+  margin-top: 20px;
+}
+.validate-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 8px;
+}
+.validate-row .v-code { color: var(--amber-glow); min-width: 100px; }
+.validate-row .v-title { flex: 1; color: var(--amber); }
+.validate-row .v-ok { color: var(--success); }
+.validate-row .v-bad { color: var(--error); }
+
+#validate-input {
+  width: 100%;
+  min-height: 100px;
+  background: var(--bg);
+  color: var(--amber-glow);
+  border: 2px solid var(--border);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 12px;
+  outline: none;
+  resize: vertical;
+}
+#validate-input:focus { border-color: var(--amber); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: var(--amber-dim); }
+
+/* ── Pyodide loading overlay ── */
+#pyodide-status {
+  font-size: 8px;
+  color: var(--amber-dim);
+  padding: 6px 0;
+  min-height: 20px;
+}
+
+/* ── Problem navigation ── */
+.problem-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid var(--border);
+}
+
+.nav-btn {
+  display: block;
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--amber);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  min-height: 56px;
+}
+.nav-btn:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 10px var(--amber-dim);
+  text-decoration: none;
+  color: var(--amber-glow);
+}
+.nav-btn.disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+.nav-btn.nav-prev { text-align: left; }
+.nav-btn.nav-next { text-align: right; }
+
+.nav-direction {
+  font-size: 7px;
+  color: var(--amber-dim);
+  display: block;
+  margin-bottom: 5px;
+}
+.nav-title {
+  font-size: 8px;
+  line-height: 1.6;
+  display: block;
+}

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LBOA — Problem</title>
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="breadcrumb">
+    <a href="index.html">[ HOME ]</a> &gt; <span id="breadcrumb-title">...</span>
+  </div>
+
+  <div id="pyodide-status" class="loading-bar">
+    LOADING PYTHON RUNTIME<span>...</span>
+  </div>
+
+  <!-- Problem header -->
+  <div class="nes-container with-title" style="margin-bottom:20px">
+    <p class="title" id="problem-heading">Loading...</p>
+    <div id="problem-meta" style="font-size:8px; color: var(--amber-dim); margin-bottom:12px"></div>
+    <div id="problem-description" class="problem-description"></div>
+  </div>
+
+  <!-- Coding layout -->
+  <div id="coding-section" style="display:none">
+    <div class="problem-layout">
+      <div class="editor-wrap">
+        <div class="nes-container with-title">
+          <p class="title">EDITOR</p>
+          <textarea id="code-editor" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="nes-btn is-primary" id="run-btn" disabled>▶ RUN</button>
+          <button class="nes-btn" id="check-btn" disabled>✓ CHECK</button>
+          <button class="nes-btn" id="reset-btn">↺ RESET</button>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="nes-container with-title">
+          <p class="title">OUTPUT</p>
+          <div class="terminal" id="terminal">
+            <span class="t-prompt">READY.</span>
+          </div>
+        </div>
+        <div id="test-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MCQ section -->
+  <div id="mcq-section" style="display:none">
+    <div class="nes-container with-title">
+      <p class="title">QUESTIONS</p>
+      <div id="mcq-questions"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="nes-btn is-primary" id="mcq-submit">✓ SUBMIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parsons section -->
+  <div id="parsons-section" style="display:none">
+    <div class="nes-container with-title">
+      <p class="title">ARRANGE THE CODE</p>
+      <div class="parsons-area">
+        <div>
+          <div style="font-size:8px; color:var(--amber-dim); margin-bottom:8px">DRAG FROM HERE:</div>
+          <div id="parsons-bank"></div>
+        </div>
+        <div>
+          <div style="font-size:8px; color:var(--amber-dim); margin-bottom:8px">BUILD YOUR SOLUTION:</div>
+          <div id="parsons-slots"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="nes-btn is-primary" id="parsons-submit">✓ CHECK ORDER</button>
+        <button class="nes-btn" id="parsons-reset">↺ RESET</button>
+      </div>
+      <div id="parsons-feedback" style="margin-top:12px; font-size:8px"></div>
+    </div>
+  </div>
+
+  <!-- Code reveal dialog -->
+  <dialog id="code-dialog" class="nes-dialog">
+    <form method="dialog">
+      <div class="code-reveal">
+        <p style="font-size:10px; color:var(--success); text-shadow:0 0 8px var(--success)">
+          &#x2605; CHALLENGE COMPLETE &#x2605;
+        </p>
+        <p style="font-size:8px; margin-top:12px">YOUR CODE IS:</p>
+        <span class="big-code" id="revealed-code"></span>
+        <p style="font-size:7px; color:var(--amber-dim)">Write it down or take a screenshot!</p>
+        <div class="btn-row" style="justify-content:center; margin-top:16px; gap:12px">
+          <button class="nes-btn is-success">COLLECT IT!</button>
+          <a class="nes-btn" id="dialog-next-btn" href="index.html">NEXT &gt;</a>
+          <a class="nes-btn" href="index.html">HOME</a>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Bottom prev/next navigation -->
+  <nav class="problem-nav" id="problem-nav" aria-label="Problem navigation"></nav>
+
+</div>
+
+<script src="js/problems.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/runner.js"></script>
+<script>
+  // ── Load problem from URL ──
+  const params = new URLSearchParams(location.search);
+  const problemId = params.get("id");
+  const problem = PROBLEMS.find(p => p.id === problemId);
+
+  if (!problem) {
+    document.getElementById("problem-heading").textContent = "Problem not found";
+  } else {
+    init(problem);
+  }
+
+  function init(p) {
+    document.title = `LBOA — CH${String(p.num).padStart(2,"0")}: ${p.title}`;
+    document.getElementById("breadcrumb-title").textContent = `CH${String(p.num).padStart(2,"0")} ${p.title}`;
+    document.getElementById("problem-heading").textContent = `CH${String(p.num).padStart(2,"0")}: ${p.title}`;
+
+    const typeLabel = { coding: "CODE", mcq: "MCQ", trace: "TRACE", parsons: "SORT" };
+    document.getElementById("problem-meta").innerHTML =
+      `<span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>&nbsp;
+       <span class="badge type">${typeLabel[p.type] || p.type.toUpperCase()}</span>&nbsp;
+       <span style="color:var(--amber-dim)">${p.topic}</span>
+       ${Progress.has(p.code) ? '&nbsp;<span style="color:var(--amber)">&#x2605; COMPLETED</span>' : ''}`;
+
+    document.getElementById("problem-description").innerHTML = p.description;
+
+    if (p.type === "coding") {
+      initCoding(p);
+    } else if (p.type === "mcq") {
+      initMCQ(p);
+    } else if (p.type === "parsons") {
+      initParsons(p);
+    }
+
+    initNav(p);
+  }
+
+  // ── Prev / Next navigation ──
+  function problemUrl(p) {
+    return `problem.html?id=${p.id}`;
+  }
+
+  function initNav(p) {
+    const idx = PROBLEMS.indexOf(p);
+    const prev = PROBLEMS[idx - 1] || null;
+    const next = PROBLEMS[idx + 1] || null;
+
+    const nav = document.getElementById("problem-nav");
+    nav.innerHTML = `
+      ${prev
+        ? `<a class="nav-btn nav-prev" href="${problemUrl(prev)}">
+             <span class="nav-direction">&#x2190; PREVIOUS</span>
+             <span class="nav-title">CH${String(prev.num).padStart(2,"0")}: ${prev.title}</span>
+           </a>`
+        : `<span class="nav-btn nav-prev disabled">
+             <span class="nav-direction">&#x2190; PREVIOUS</span>
+             <span class="nav-title" style="color:var(--border)">Start of pathway</span>
+           </span>`}
+      ${next
+        ? `<a class="nav-btn nav-next" href="${problemUrl(next)}">
+             <span class="nav-direction">NEXT &#x2192;</span>
+             <span class="nav-title">CH${String(next.num).padStart(2,"0")}: ${next.title}</span>
+           </a>`
+        : `<span class="nav-btn nav-next disabled">
+             <span class="nav-direction">NEXT &#x2192;</span>
+             <span class="nav-title" style="color:var(--border)">End of pathway</span>
+           </span>`}`;
+
+    // Wire dialog's "NEXT >" button
+    const dialogNext = document.getElementById("dialog-next-btn");
+    if (next) {
+      dialogNext.href = problemUrl(next);
+      dialogNext.textContent = "NEXT >";
+    } else {
+      dialogNext.href = "index.html";
+      dialogNext.textContent = "HOME";
+    }
+
+    // Keyboard shortcuts: ← → (only when not typing in editor/textarea)
+    document.addEventListener("keydown", e => {
+      if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+      if (e.key === "ArrowLeft"  && prev) location.href = problemUrl(prev);
+      if (e.key === "ArrowRight" && next) location.href = problemUrl(next);
+    });
+  }
+
+  // ── CODING ──
+  function initCoding(p) {
+    document.getElementById("coding-section").style.display = "block";
+    const editor = document.getElementById("code-editor");
+
+    const savedKey = `lboa_code_${p.id}`;
+    editor.value = localStorage.getItem(savedKey) || p.starterCode || "";
+
+    editor.addEventListener("input", () => {
+      localStorage.setItem(savedKey, editor.value);
+    });
+
+    // Tab key inserts spaces
+    editor.addEventListener("keydown", e => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const s = editor.selectionStart, end = editor.selectionEnd;
+        editor.value = editor.value.slice(0, s) + "    " + editor.value.slice(end);
+        editor.selectionStart = editor.selectionEnd = s + 4;
+      }
+    });
+
+    const runBtn = document.getElementById("run-btn");
+    const checkBtn = document.getElementById("check-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    // Start loading Pyodide immediately
+    loadPyodideOnce().then(() => {
+      document.getElementById("pyodide-status").style.display = "none";
+      runBtn.disabled = false;
+      checkBtn.disabled = false;
+    });
+
+    runBtn.addEventListener("click", async () => {
+      runBtn.disabled = true;
+      clearTerminal();
+      writeTerminal("▶ RUN\n", "t-prompt");
+      await runCode(editor.value, t => writeTerminal(t));
+      runBtn.disabled = false;
+    });
+
+    checkBtn.addEventListener("click", async () => {
+      checkBtn.disabled = true;
+      runBtn.disabled = true;
+      clearTerminal();
+      writeTerminal("✓ RUNNING TESTS...\n", "t-prompt");
+      document.getElementById("test-results").innerHTML = "";
+
+      const results = await runTests(editor.value, p.testCode, t => writeTerminal(t));
+      runBtn.disabled = false;
+      checkBtn.disabled = false;
+
+      if (!results) {
+        writeTerminal("\n[ERR] Could not run tests. Check your code for syntax errors.\n", "t-error");
+        return;
+      }
+
+      renderTestResults(results, p);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      if (confirm("Reset code to starter template?")) {
+        editor.value = p.starterCode || "";
+        localStorage.removeItem(`lboa_code_${p.id}`);
+        clearTerminal();
+        writeTerminal("READY.", "t-prompt");
+        document.getElementById("test-results").innerHTML = "";
+      }
+    });
+  }
+
+  function clearTerminal() {
+    document.getElementById("terminal").innerHTML = "";
+  }
+
+  function writeTerminal(text, cls = "") {
+    const term = document.getElementById("terminal");
+    const span = document.createElement("span");
+    if (cls) span.className = cls;
+    span.textContent = text;
+    term.appendChild(span);
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function renderTestResults(results, p) {
+    const container = document.getElementById("test-results");
+    let allPass = true;
+    container.innerHTML = "";
+
+    for (const [name, pass, msg] of results) {
+      if (!pass) allPass = false;
+      const row = document.createElement("div");
+      row.className = "test-result-row " + (pass ? "test-pass" : "test-fail");
+      row.innerHTML = `
+        <span class="test-icon">${pass ? "✓" : "✗"}</span>
+        <div>
+          <div class="test-name">${escHtml(name)}</div>
+          ${!pass ? `<div class="test-msg">${escHtml(msg)}</div>` : ""}
+        </div>`;
+      container.appendChild(row);
+    }
+
+    if (allPass) {
+      writeTerminal("\n★ ALL TESTS PASSED!\n", "t-success");
+      revealCode(p);
+    } else {
+      writeTerminal("\nSome tests failed. Keep going!\n", "t-error");
+    }
+  }
+
+  function revealCode(p) {
+    Progress.collect(p.code);
+    document.getElementById("revealed-code").textContent = p.code;
+    document.getElementById("code-dialog").showModal();
+  }
+
+  // ── MCQ ──
+  function initMCQ(p) {
+    document.getElementById("pyodide-status").style.display = "none";
+    document.getElementById("mcq-section").style.display = "block";
+    const container = document.getElementById("mcq-questions");
+
+    p.questions.forEach((q, qi) => {
+      const div = document.createElement("div");
+      div.className = "mcq-question";
+      div.innerHTML = `<p>${qi + 1}. ${q.q}</p>`;
+      q.options.forEach((opt, oi) => {
+        const label = document.createElement("label");
+        label.className = "mcq-option";
+        label.innerHTML = `
+          <input type="radio" name="q${qi}" value="${oi}" class="nes-radio">
+          <span>${opt}</span>`;
+        div.appendChild(label);
+      });
+      container.appendChild(div);
+      container.appendChild(document.createElement("hr"));
+    });
+
+    document.getElementById("mcq-submit").addEventListener("click", () => {
+      let allCorrect = true;
+      p.questions.forEach((q, qi) => {
+        const selected = document.querySelector(`input[name="q${qi}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${qi}"]`);
+        options.forEach(opt => {
+          const label = opt.parentElement;
+          label.classList.remove("correct", "wrong");
+          if (parseInt(opt.value) === q.answer) {
+            label.classList.add("correct");
+          } else if (opt.checked && parseInt(opt.value) !== q.answer) {
+            label.classList.add("wrong");
+            allCorrect = false;
+          }
+        });
+        if (!selected) allCorrect = false;
+      });
+
+      if (allCorrect) {
+        revealCode(p);
+      } else {
+        const btn = document.getElementById("mcq-submit");
+        btn.textContent = "✗ TRY AGAIN";
+        btn.className = "nes-btn is-error";
+        setTimeout(() => {
+          btn.textContent = "✓ SUBMIT";
+          btn.className = "nes-btn is-primary";
+        }, 1500);
+      }
+    });
+  }
+
+  // ── PARSONS ──
+  function initParsons(p) {
+    document.getElementById("pyodide-status").style.display = "none";
+    document.getElementById("parsons-section").style.display = "block";
+
+    const bankEl = document.getElementById("parsons-bank");
+    const slotsEl = document.getElementById("parsons-slots");
+
+    // Shuffle blocks for display
+    const shuffled = [...p.blocks.keys()].sort(() => Math.random() - 0.5);
+    let slotContents = new Array(p.blocks.length).fill(null);
+
+    function renderBank() {
+      bankEl.innerHTML = "";
+      shuffled.forEach(idx => {
+        if (slotContents.includes(idx)) return;
+        const div = document.createElement("div");
+        div.className = "parsons-block";
+        div.textContent = p.blocks[idx];
+        div.draggable = true;
+        div.dataset.idx = idx;
+        div.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", idx);
+          e.dataTransfer.setData("source", "bank");
+        });
+        bankEl.appendChild(div);
+      });
+    }
+
+    function renderSlots() {
+      slotsEl.innerHTML = "";
+      for (let i = 0; i < p.blocks.length; i++) {
+        const slot = document.createElement("div");
+        slot.className = "parsons-slot";
+        slot.dataset.slot = i;
+
+        if (slotContents[i] !== null) {
+          const block = document.createElement("div");
+          block.className = "parsons-block";
+          block.style.margin = "0";
+          block.style.width = "100%";
+          block.textContent = p.blocks[slotContents[i]];
+          block.draggable = true;
+          block.dataset.idx = slotContents[i];
+          block.dataset.fromSlot = i;
+          block.addEventListener("dragstart", e => {
+            e.dataTransfer.setData("text/plain", slotContents[i]);
+            e.dataTransfer.setData("source", "slot");
+            e.dataTransfer.setData("fromSlot", i);
+          });
+          slot.appendChild(block);
+        }
+
+        slot.addEventListener("dragover", e => e.preventDefault());
+        slot.addEventListener("drop", e => {
+          e.preventDefault();
+          const idx = parseInt(e.dataTransfer.getData("text/plain"));
+          const source = e.dataTransfer.getData("source");
+          const fromSlot = parseInt(e.dataTransfer.getData("fromSlot"));
+          const toSlot = parseInt(slot.dataset.slot);
+
+          if (source === "slot") {
+            slotContents[fromSlot] = slotContents[toSlot];
+            slotContents[toSlot] = idx;
+          } else {
+            slotContents[toSlot] = idx;
+          }
+          renderBank();
+          renderSlots();
+        });
+
+        slotsEl.appendChild(slot);
+      }
+    }
+
+    bankEl.addEventListener("dragover", e => e.preventDefault());
+    bankEl.addEventListener("drop", e => {
+      e.preventDefault();
+      const source = e.dataTransfer.getData("source");
+      if (source === "slot") {
+        const fromSlot = parseInt(e.dataTransfer.getData("fromSlot"));
+        slotContents[fromSlot] = null;
+        renderBank();
+        renderSlots();
+      }
+    });
+
+    document.getElementById("parsons-submit").addEventListener("click", () => {
+      const fb = document.getElementById("parsons-feedback");
+      if (slotContents.some(s => s === null)) {
+        fb.innerHTML = '<span style="color:var(--error)">Place all blocks before checking!</span>';
+        return;
+      }
+      const correct = p.correctOrder.every((expected, i) => slotContents[i] === expected);
+      if (correct) {
+        fb.innerHTML = '<span style="color:var(--success)">★ CORRECT ORDER!</span>';
+        revealCode(p);
+      } else {
+        fb.innerHTML = '<span style="color:var(--error)">Not quite — try again!</span>';
+      }
+    });
+
+    document.getElementById("parsons-reset").addEventListener("click", () => {
+      slotContents = new Array(p.blocks.length).fill(null);
+      document.getElementById("parsons-feedback").innerHTML = "";
+      renderBank();
+      renderSlots();
+    });
+
+    renderBank();
+    renderSlots();
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LBOA — Validate Codes</title>
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="breadcrumb">
+    <a href="index.html">[ HOME ]</a> &gt; VALIDATE CODES
+  </div>
+
+  <div class="nes-container with-title" style="margin-bottom:24px">
+    <p class="title">YOUR COLLECTED CODES</p>
+    <div id="my-codes-area">
+      <p style="font-size:8px; color:var(--amber-dim)">Loading...</p>
+    </div>
+  </div>
+
+  <div class="nes-container with-title" style="margin-bottom:24px">
+    <p class="title">TEACHER VALIDATOR</p>
+    <p style="font-size:8px; color:var(--amber-dim); margin-bottom:12px">
+      Paste a student's codes below (one per line, or comma-separated).<br>
+      No names or personal data required.
+    </p>
+    <textarea
+      id="validate-input"
+      placeholder="LBOA-F1A2&#10;LBOA-G3B4&#10;LBOA-H5C6"
+    ></textarea>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="nes-btn is-primary" id="validate-btn">✓ VALIDATE</button>
+      <button class="nes-btn" id="clear-btn">↺ CLEAR</button>
+    </div>
+    <div class="validate-results" id="validate-results"></div>
+  </div>
+
+</div>
+
+<script src="js/problems.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/codes.js"></script>
+<script>
+  // ── Show own collected codes ──
+  function renderMyСodes() {
+    const area = document.getElementById("my-codes-area");
+    const all = Progress.getAll();
+    const collected = PROBLEMS.filter(p => all[p.code]);
+
+    if (collected.length === 0) {
+      area.innerHTML = `<p style="font-size:8px;color:var(--amber-dim)">No codes collected yet. Go solve some problems!</p>`;
+      return;
+    }
+
+    let html = `<p style="font-size:8px;color:var(--amber-dim);margin-bottom:12px">${collected.length} / 48 collected</p>`;
+    html += `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">`;
+    for (const p of collected) {
+      html += `<span style="font-size:8px;border:1px solid var(--amber);padding:4px 8px;color:var(--amber-glow)">${p.code}</span>`;
+    }
+    html += `</div>`;
+    html += `<div class="validate-results">`;
+    for (const p of collected) {
+      const typeLabel = { coding:"CODE", mcq:"MCQ", trace:"TRACE", parsons:"SORT" };
+      html += `
+        <div class="validate-row">
+          <span class="v-code">${p.code}</span>
+          <span class="v-title">CH${String(p.num).padStart(2,"0")}: ${p.title}</span>
+          <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
+          <span class="v-ok">★</span>
+        </div>`;
+    }
+    html += `</div>`;
+    html += `<div style="margin-top:16px">
+      <button class="nes-btn" id="copy-btn" style="font-size:8px">&#x2398; COPY ALL CODES</button>
+      &nbsp;
+      <button class="nes-btn is-error" id="reset-progress-btn" style="font-size:8px">&#x2620; RESET PROGRESS</button>
+    </div>`;
+    area.innerHTML = html;
+
+    document.getElementById("copy-btn").addEventListener("click", () => {
+      const codes = collected.map(p => p.code).join("\n");
+      navigator.clipboard.writeText(codes).then(() => {
+        document.getElementById("copy-btn").textContent = "✓ COPIED!";
+        setTimeout(() => document.getElementById("copy-btn").textContent = "⊘ COPY ALL CODES", 2000);
+      });
+    });
+
+    document.getElementById("reset-progress-btn").addEventListener("click", () => {
+      if (confirm("Delete ALL collected codes? This cannot be undone.")) {
+        Progress.clear();
+        renderMyСodes();
+      }
+    });
+  }
+
+  // ── Teacher validator ──
+  document.getElementById("validate-btn").addEventListener("click", () => {
+    const input = document.getElementById("validate-input").value;
+    const results = Codes.validate(input);
+    const container = document.getElementById("validate-results");
+
+    if (results.length === 0) {
+      container.innerHTML = `<p style="font-size:8px;color:var(--amber-dim);margin-top:12px">No codes entered.</p>`;
+      return;
+    }
+
+    const valid = results.filter(r => r.valid);
+    const invalid = results.filter(r => !r.valid);
+
+    let html = `<p style="font-size:8px;color:var(--amber-dim);margin:12px 0">
+      Found <span style="color:var(--success)">${valid.length} valid</span>
+      and <span style="color:var(--error)">${invalid.length} invalid</span> code(s).
+    </p>`;
+
+    if (valid.length > 0) {
+      html += `<div style="margin-bottom:8px;font-size:8px;color:var(--amber)">COMPLETED CHALLENGES:</div>`;
+      for (const r of valid) {
+        const p = r.problem;
+        const typeLabel = { coding:"CODE", mcq:"MCQ", trace:"TRACE", parsons:"SORT" };
+        html += `
+          <div class="validate-row">
+            <span class="v-code">${p.code}</span>
+            <span class="v-title">CH${String(p.num).padStart(2,"0")}: ${p.title}</span>
+            <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
+            <span class="v-ok">&#x2713;</span>
+          </div>`;
+      }
+    }
+
+    if (invalid.length > 0) {
+      html += `<div style="margin:12px 0 8px;font-size:8px;color:var(--error)">UNRECOGNISED CODES:</div>`;
+      for (const r of invalid) {
+        html += `
+          <div class="validate-row">
+            <span class="v-code" style="color:var(--error)">${r.code}</span>
+            <span class="v-title" style="color:var(--amber-dim)">Not a valid LBOA code</span>
+            <span class="v-bad">&#x2717;</span>
+          </div>`;
+      }
+    }
+
+    container.innerHTML = html;
+  });
+
+  document.getElementById("clear-btn").addEventListener("click", () => {
+    document.getElementById("validate-input").value = "";
+    document.getElementById("validate-results").innerHTML = "";
+  });
+
+  renderMyСodes();
+</script>
+</body>
+</html>

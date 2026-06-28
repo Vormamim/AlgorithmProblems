@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Cheat Sheet PWA</title>
+    
+    <!-- Semantic UI CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA theme color -->
+    <meta name="theme-color" content="#2185d0">
+    
+    <!-- iOS PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Python Cheat Sheet">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <div class="ui container" id="top">
+        <!-- Header -->
+        <div class="ui center aligned header segment">
+            <h1 class="ui blue header">
+                <i class="python icon"></i>
+                <div class="content">
+                    Python Cheat Sheet
+                    <div class="sub header">Your comprehensive Python reference guide</div>
+                </div>
+            </h1>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="ui fluid icon input search-container">
+            <input type="text" id="searchInput" placeholder="Search Python concepts...">
+            <i class="search icon"></i>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="ui segment" id="table-of-contents">
+            <h2 class="ui header">
+                <i class="list icon"></i>
+                <div class="content">Table of Contents</div>
+            </h2>
+            <div class="ui relaxed divided list">
+                <a class="item" href="#general"><i class="comment icon"></i> General</a>
+                <a class="item" href="#print-input"><i class="print icon"></i> Print & Input</a>
+                <a class="item" href="#variables"><i class="code icon"></i> Variables</a>
+                <a class="item" href="#strings"><i class="quote left icon"></i> Strings</a>
+                <a class="item" href="#numbers"><i class="calculator icon"></i> Numbers</a>
+                <a class="item" href="#data-conversion"><i class="exchange icon"></i> Data Conversion</a>
+                <a class="item" href="#conditionals"><i class="question icon"></i> If/Else</a>
+                <a class="item" href="#lists"><i class="list icon"></i> Lists</a>
+                <a class="item" href="#dictionaries"><i class="book icon"></i> Dictionaries</a>
+                <a class="item" href="#dates"><i class="calendar icon"></i> Dates</a>
+                <a class="item" href="#functions"><i class="cog icon"></i> Functions</a>
+                <a class="item" href="#oop"><i class="object group icon"></i> OOP</a>
+                <a class="item" href="#files"><i class="file icon"></i> Files</a>
+                <a class="item" href="#plotting"><i class="chart line icon"></i> Plotting</a>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="ui segment" id="general">
+            <h2 class="ui header">
+                <i class="comment icon"></i>
+                <div class="content">General</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Comments</h3>
+                <p>Comments are generally a bad idea, your code should be explicit enough as it is.</p>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># This is a comment
+print("Hello, World!")
+
+"""
+This is a comment
+written in
+more than just one line
+"""</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="print-input">
+            <h2 class="ui header">
+                <i class="print icon"></i>
+                <div class="content">Print & Input</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Print</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>print("Hello world!")
+
+message = "Python Cheat Sheet"
+print(message)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Input</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>first_name = input("What is your first name? ")
+last_name = input("What is your last name? ")
+full_name = first_name + " " + last_name
+print(full_name)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="variables">
+            <h2 class="ui header">
+                <i class="code icon"></i>
+                <div class="content">Variables</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Variable Creation</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>school = "Python Academy"
+full_package = "Python Pro"
+projects = 4
+awesome = True</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Variable Operations</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>x = 2
+y = 3
+z = x + y # 5
+
+city = "Lisbon"
+country = "Portugal"
+place = city + " " + country # Lisbon Portugal</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="strings">
+            <h2 class="ui header">
+                <i class="quote left icon"></i>
+                <div class="content">Strings</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">String Creation</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>greetings = "Good morning!"
+sentence = "it's sunny today"</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">String Length</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>sentence = "it's sunny today"
+print(len(sentence)) # 16</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Access String Characters</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>sentence = "it's sunny today"
+
+print(sentence[0]) # i
+print(sentence[0:10]) # it's sunny</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">String Methods</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>print("hello".capitalize()) # Hello
+print("hello".upper()) # HELLO
+print("Hello".lower()) # hello
+print(" Hello     ".strip().upper()) # HELLO
+print("Hello".count("l")) # 2
+print("Hello".replace('l', 'x')) # Hexxo</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">f-Strings</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>greetings = "Good morning!"
+sentence = "it's sunny today"
+
+print(f"{greetings} {sentence.capitalize()}.") 
+# Good morning! It's sunny today</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="numbers">
+            <h2 class="ui header">
+                <i class="calculator icon"></i>
+                <div class="content">Numbers</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Integers</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>months = 12
+print(months)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Float</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>pi = 3.14159265358979323
+print(pi)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Arithmetic</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>print(2 + 2)
+print(2 - 2)
+print(2 * 2)
+print(2 / 2)
+print(2 ** 2)
+
+a = 10
+b = 3
+print(a * b / 2)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Built-in Functions</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Power Function</div>
+                    <pre><code>result = pow(2, 3) 
+print(result) # 8</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Absolute Value</div>
+                    <pre><code>absolute = abs(-10) 
+print(absolute) # 10</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Round Function</div>
+                    <pre><code>price = 99
+discount = 18.15
+discounted_price = price - price * discount / 100
+print(round(discounted_price))</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="data-conversion">
+            <h2 class="ui header">
+                <i class="exchange icon"></i>
+                <div class="content">Data Type Conversion</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">String to Integer</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>temperature = "12"
+temperature = int(temperature)
+
+print(temperature + 10)
+
+temperature = input("What is the temperature? ")
+temperature = int(temperature)
+print(f"Tonight it will be {temperature - 10} degrees")</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">String to Float</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>temperature = "12.5"
+temperature = float(temperature)
+
+print(temperature + 10)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Number to String</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>temperature  = 12
+temperature = str(temperature)
+print("It is currently "  + temperature + " degrees")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="conditionals">
+            <h2 class="ui header">
+                <i class="question icon"></i>
+                <div class="content">If/Else Statements</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Comparison Operators</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>a = 1
+b = 2  
+print(a == b) # equal to => False
+print(a != b) # not equal to => True
+print(a > b) # greater than => False
+print(a < b) # less than => True
+print(a >= b) # greater than or equal to => False
+print(a <= b) # less than or equal to => True</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Logical Operators</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># Logical Operators: and, or, not
+print(a == 1 and b == 2) # True
+print(a == 2 and b == 2) # False
+print(a == 1 or b == 3) # True
+print(a == 4 or b == 0) # False
+print(not(a == 2)) # True</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Booleans</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>open = True
+closed = False</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">If/Else Statements</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>age = input("How are old are you? ")
+age = int(age)
+
+if age >= 65 and age <= 90:
+  print("You are wise")
+
+if age < 18:
+  print("You cannot vote")
+  print(f"because you are {age} years old")
+else:
+  print("You're old enough to vote, congrats! 👏")
+
+if age >= 21:
+  print("You can party")
+else:
+  print("Stay home, you're too young to party")</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">If-Elif-Else Statements</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>temperature = input("What's the temperature outside? ")
+temperature = int(temperature)
+
+if temperature > 30: 
+  print("It's warm")
+elif temperature >= 20:
+  print("It's nice")
+elif temperature >= 10:
+  print("It's chilly")
+else:
+  print("It's cold")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="lists">
+            <h2 class="ui header">
+                <i class="list icon"></i>
+                <div class="content">Lists</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">List Creation</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># List of strings
+students = ["Luiza", "Maria", "Sara", "Daniela"]
+# List of numbers
+numbers = [1, 3, 5, 10]
+# Empty list
+certificates = []</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Access List Elements</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># Access an element of the list
+# Index starts at 0, not 1
+print(students[0]) # => Luiza
+print(students[1]) # => Maria</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">List Operations</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Length</div>
+                    <pre><code>print(len(students)) # => 4</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Update Element</div>
+                    <pre><code>students[1] = "Julie"
+print(students) # => ["Luiza", "Julie", "Sara", "Daniela"]</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Add Elements</div>
+                    <pre><code># Add an element to the list
+students.append("Sofia")
+print(students) # => ["Luiza", "Julie", "Sara", "Daniela", "Sofia"]
+students.insert(0, "Matilde")
+print(students) # => ["Matilde", "Luiza", "Julie", "Sara", "Daniela", "Sofia"]</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Remove Elements</div>
+                    <pre><code>students.remove("Daniela")
+print(students) # => ["Matilde", "Luiza", "Julie", "Sara", "Sofia"]
+students.pop()
+print(students) # => ["Matilde", "Luiza", "Julie", "Sara"]
+students.pop(2)
+print(students) # => ["Matilde", "Luiza", "Sara"]
+del students[1]
+print(students) # => ["Matilde", "Sara"]</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Sort Lists</div>
+                    <pre><code>students = ["Luiza", "Maria", "Sara", "Daniela"]
+students.sort()
+print(students) # => ["Daniela", "Luiza", "Maria", "Sara"]
+students.reverse()
+print(students) # => ["Sara", "Maria", "Luiza", "Daniela"]</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">List For Loops</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>students = ["Maria", "Sara", "Daniela", "Julie", "Luiza"]
+
+for student in students:
+  print(f"The student name is {student.title()}.")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="dictionaries">
+            <h2 class="ui header">
+                <i class="book icon"></i>
+                <div class="content">Dictionaries</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Dictionary Declaration</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># Creating an empty dictionary
+winners = {}
+
+# Creating a dictionary with key-value pairs
+temperatures = {"Lisbon": 12, "Paris": 15, "Madrid": 35}</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Dictionary Operations</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Access Elements</div>
+                    <pre><code>temperatures = {"Lisbon": 12, "Paris": 15, "Madrid": 35}
+
+# Accessing a value
+print(temperatures["Madrid"]) # => 35
+print(temperatures["Lisbon"]) # => 12
+print(temperatures.get("Lisbon")) # => 12
+print(temperatures.get("New York")) # => None</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Add Key-Value Pair</div>
+                    <pre><code># Creating a dictionary with key-value pairs
+temperatures = {"Lisbon": 12, "Paris": 15, "Madrid": 35}
+
+# Adding a key-value pair
+temperatures["New York"] = 2
+print(temperatures) # {'Lisbon': 12, 'Paris': 15, 'Madrid': 35, 'New York': 2}</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Modify Value</div>
+                    <pre><code># Modify a value
+temperatures["Lisbon"] = 25
+print(temperatures["Lisbon"]) # => 25</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Remove Elements</div>
+                    <pre><code>temperatures = {"Lisbon": 12, "Paris": 15, "Madrid": 35}
+
+# Removing key-value pair
+del temperatures["Lisbon"]
+print(temperatures) # {'Paris': 15, 'Madrid': 35}
+temperatures.pop("Paris")
+print(temperatures) # {'Madrid': 35}
+temperatures.popitem()
+print(temperatures) # {}</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Dictionary For Loops</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>temperatures = {"Lisbon": 22, "London": 10, "Sydney": 32}
+
+# Looping through each key
+for city in temperatures:
+  temperature = temperatures[city]
+  print(f"The temperature in {city} is {temperature} degrees")
+
+# Better: Looping through each key-value pair
+for city, temperature in temperatures.items():
+  print(f"The temperature in {city} is {temperature} degrees")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="dates">
+            <h2 class="ui header">
+                <i class="calendar icon"></i>
+                <div class="content">Dates</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Current Date and Time</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>from datetime import datetime
+
+now = datetime.now()
+print(now)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Create Date Manually</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>from datetime import datetime
+
+date = datetime(2034, 1, 24, 4, 0, 12)
+print(date)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Date Formatting</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Convert Date to String</div>
+                    <pre><code>from datetime import datetime
+
+formatted_date = date.strftime("See you on %d %B %Y at %-I%p")
+print(formatted_date)</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Get Timestamp</div>
+                    <pre><code>from datetime import datetime
+
+print(now.timestamp())</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">Create Date from Timestamp</div>
+                    <pre><code>from datetime import datetime
+
+timestamp = 1705590204
+date_from_timestamp = datetime.fromtimestamp(timestamp)
+print(date_from_timestamp)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="functions">
+            <h2 class="ui header">
+                <i class="cog icon"></i>
+                <div class="content">Functions</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Function Declaration</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>def say_hello_world():
+  name = input("What is your name? ")
+  if name:
+    print(f"Hello {name.capitalize()}!")
+  else:
+    print("Too bad you don't have a name")
+
+say_hello_world()
+say_hello_world()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Function Arguments</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>def greet_user(first_name, last_name):
+  """Welcome the user"""
+  full_name = first_name + " " + last_name
+  print(f"Hello {full_name}!")
+
+greet_user("Matt", "Delac")
+greet_user("Sara", "Smith")</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Default Arguments</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>def display_full_name(first_name, last_name, middle_name=""):
+  """Display a full name based on the first, last, and middle name"""
+  if middle_name:
+    full_name = first_name + " " + middle_name + " " + last_name
+  else:
+    full_name = first_name + " " + last_name
+  
+  print(full_name)
+
+display_full_name("Samantha", "Smith", "Jane")
+display_full_name("Sara", "Jones")
+display_full_name("Matt", "Delac", "Lucien")</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Function Return</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>def full_name(first_name, last_name, middle_name=None):
+  """Generate full name from first and last name"""
+  if middle_name:
+    return first_name + " " + middle_name + " " + last_name
+  else:
+    return first_name + " " + last_name
+
+name = full_name("John", "Doe")
+print("The full name is " + name)
+name = full_name("John", "Doe", "Jr.")
+print("The full name is " + name)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="oop">
+            <h2 class="ui header">
+                <i class="object group icon"></i>
+                <div class="content">Object-Oriented Programming</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Class Initializer</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>class User:
+  """Defines a User class"""
+  
+  def __init__(self, first_name):
+    """Initializes a new user"""
+    print("Hello from the User class")
+
+matt = User("Matt")
+emilie = User("Emilie")
+maria = User("Maria")</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Class Attributes and Methods</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>class Dog:
+  def __init__(self, name, age):
+    """Initialize the dog"""
+    self.name = name
+    self.age = age
+    self.healthy = True
+  
+  def say_hello(self):
+    """Say hello with the dog name"""
+    print(f"Hello, I'm a dog named {self.name}")
+    print(f"I'm {self.age} years old")
+
+  def get_older(self):
+    self.age = self.age + 1
+
+  def rename(self, new_name):
+    self.name = new_name
+
+  def is_sick(self):
+    self.healthy = False
+
+  def is_healthy(self):
+    self.healthy = True
+
+snoopy = Dog("Snoopy", 2)
+snoopy.say_hello()
+snoopy.get_older()
+snoopy.rename("Jimmy")
+snoopy.say_hello()
+snoopy.is_sick()
+print(snoopy.healthy)</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Class Inheritance</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>class Animal():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age 
+
+    def speak(self):
+        print("I am", self.name, "and I am", self.age, "years old")
+
+class Dog(Animal):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        self.type = "dog"
+
+    # Since we inherit from the animal class we can use the method speak on Dog objects
+
+tim = Dog("Tim", 5)
+tim.speak() # This will print "I am Tim and I am 5 years old"</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="files">
+            <h2 class="ui header">
+                <i class="file icon"></i>
+                <div class="content">File Manipulation</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Read File</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># Open the file
+file = open('cities.txt', 'r')
+cities = file.readlines()
+
+# or more Pythonic approach
+with open('cities.txt', 'r') as file:
+  lines = file.readlines()
+
+# loop all the cities
+for city in cities:
+  print(f"I want to visit {city.strip()}")
+
+# Close the file
+file.close()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Write to File</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code># Write new lines into a file
+file = open('cities.txt', 'w')
+file.write('Lisbon\n')
+file.write('Paris\n')
+file.write('New York\n')
+file.close()
+
+# Append new lines into a file
+file = open('cities.txt', 'a')
+file.write('Tokyo\n')
+file.write('Toronto\n')
+file.close()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">CSV Files</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Read CSV File</div>
+                    <pre><code>import csv
+with open('Giants.csv', mode ='r')as file:
+  csvFile = csv.reader(file)
+  for lines in csvFile:
+        print(lines)</code></pre>
+                </div>
+                <div class="ui segment">
+                    <div class="ui top attached label">CSV with DictReader</div>
+                    <pre><code>import csv
+
+# Creating the raw data
+cities = [
+  {"country": "France", "city": "Paris", "weather": 24},
+  {"country": "Portugal", "city": "Lisbon", "weather": 30},
+  {"country": "Australia", "city": "Canberra", "weather": 20} 
+]
+
+# Storing the csv file field names
+field_names = ['country', 'city', 'weather']
+
+# Storing the file name we want to create
+file_name = 'cities.csv'
+
+# Create the file
+with open(file_name, 'w') as csvfile:
+  # Create the writer
+  writer = csv.DictWriter(csvfile, fieldnames=field_names)
+  # Write the file header
+  writer.writeheader()
+  # Write the file rows
+  writer.writerows(cities)
+
+# Open the file
+with open(file_name, 'r') as csvfile:
+  # Create the reader
+  reader = csv.DictReader(csvfile)
+  # Reader each line one by one
+  for line in reader:
+    print(line['country'])
+    print(line['city'])
+    print(line['weather'])</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Exception Handling</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>try:
+  file = open('cities.txt', 'r')
+  content = file.read()
+except FileNotFoundError:
+  print("cannot find the file")
+
+try: 
+  12 / 0
+except ZeroDivisionError:
+  print('cannot divide number by 0')
+
+try: 
+  a + b
+except Exception:
+  print('something went wrong')
+
+print("hello world")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui segment" id="plotting">
+            <h2 class="ui header">
+                <i class="chart line icon"></i>
+                <div class="content">Plotting with Matplotlib</div>
+                <a href="#top" class="back-to-top">
+                    <i class="angle up icon"></i>
+                    Back to Top
+                </a>
+            </h2>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Basic Plotting</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>import matplotlib.pyplot as plt
+
+years = [1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030]
+paris_population = [8, 9, 10, 11, 11.5, 12, 12, 11.5]
+new_york_population = [5, 6, 8, 11, 13, 14, 16, 18.5]
+
+plt.plot(years, paris_population)
+plt.plot(years, new_york_population)
+
+plt.title("Population growth")
+plt.xlabel('Year')
+plt.ylabel("Population (in Million)")
+plt.legend(["Paris", "New York"])
+
+plt.show()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Scatter Plots</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>import matplotlib.pyplot as plt
+
+x = [2, 5, 3, 9, 10]
+y = [200, 100, 300, 100, 250]
+z = [300, 400, 100, 120, 104]
+
+plt.scatter(x, y, color='g', alpha=0.3, label="First set")
+plt.scatter(x, z, color="r", alpha=0.3, label="Second set")
+
+plt.title('Random values')
+plt.xlabel('X values')
+plt.ylabel('Y values')
+plt.grid(True)
+
+plt.legend()
+plt.show()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Pie Charts</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>import matplotlib.pyplot as plt
+
+languages = ['French', "English", "Spanish", "Portuguese", "Greek", "Chinese"]
+counts = [10, 40, 30, 20, 5, 66]
+
+plt.pie(counts, labels=languages)
+
+plt.ylabel('Speakers')
+plt.title('Native speakers in the classroom')
+
+plt.show()</code></pre>
+                </div>
+            </div>
+            
+            <div class="ui raised segment">
+                <h3 class="ui blue header">Subplots</h3>
+                <div class="ui segment">
+                    <div class="ui top attached label">Python Code</div>
+                    <pre><code>import matplotlib.pyplot as plt
+
+fig, (ax1, ax2) = plt.subplots (2, 1)
+
+x = [1,2,3,4,5]
+y = [12, 13, 10, 8, 6]
+z = [50, 23, 25, 36, 10]
+
+ax1.plot(x, y, color='r', label="Y Values")
+ax2.plot(x, z, color='g', label="Z Values")
+
+ax1.set_title('Y growth')
+ax1.legend()
+ax2.set_title('Z growth')
+ax2.legend()
+
+plt.tight_layout()
+plt.savefig("output.png")
+plt.show()</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="ui center aligned segment">
+            <p>
+                <i class="python icon blue"></i>
+                Python Cheat Sheet PWA - Your offline Python reference guide
+            </p>
+            <div class="ui divider"></div>
+            <p class="small-text">Install this app on your device for offline access!</p>
+        </div>
+    </div>
+
+    <!-- Install prompt -->
+    <div class="ui modal" id="install-modal">
+        <div class="header">
+            <i class="download icon"></i>
+            Install Python Cheat Sheet
+        </div>
+        <div class="content">
+            <p>Install this app on your device for quick offline access to Python reference materials!</p>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <div class="ui primary button" id="install-button">Install</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

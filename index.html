@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LBOA — The Little Book of Algorithms</title>
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+<!-- Boot sequence -->
+<div id="boot-screen">
+  <pre id="boot-text"></pre>
+  <div id="boot-cursor"></div>
+</div>
+
+<!-- Main content (hidden until boot finishes) -->
+<div id="main-content" style="display:none">
+  <div class="page-wrap">
+
+    <header class="site-header">
+      <h1>&#x2605; LBOA &#x2605;</h1>
+      <p class="subtitle">The Little Book of Algorithms &mdash; Python Pathway</p>
+      <p class="subtitle" style="margin-top:6px">
+        <a href="validate.html">[ VALIDATE CODES ]</a>
+      </p>
+    </header>
+
+    <!-- Progress -->
+    <div class="progress-area nes-container">
+      <div class="progress-label">
+        CODES COLLECTED: <span id="collected-count">0</span> / 48
+      </div>
+      <progress id="progress-bar" class="nes-progress is-warning" value="0" max="48"></progress>
+    </div>
+
+    <!-- Problem list by topic -->
+    <div id="problem-list"></div>
+
+  </div>
+</div>
+
+<script src="js/problems.js"></script>
+<script src="js/progress.js"></script>
+<script>
+  // ── Boot sequence ──
+  const BOOT_LINES = [
+    "    **** LBOA ALGORITHMS TRAINER V2.01 ****",
+    "",
+    " 48K RAM SYSTEM  38911 BASIC BYTES FREE",
+    "",
+    "LOADING PROBLEM SET...",
+    "",
+    "READY.",
+    ""
+  ];
+
+  async function runBoot() {
+    const el = document.getElementById("boot-text");
+    for (const line of BOOT_LINES) {
+      for (const ch of line) {
+        el.textContent += ch;
+        await sleep(12);
+      }
+      el.textContent += "\n";
+      await sleep(80);
+    }
+    await sleep(600);
+    document.getElementById("boot-screen").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
+    renderPage();
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── Render ──
+  function renderPage() {
+    const count = Progress.count();
+    document.getElementById("collected-count").textContent = count;
+    document.getElementById("progress-bar").value = count;
+
+    const topics = [];
+    const seen = {};
+    for (const p of PROBLEMS) {
+      if (!seen[p.topic]) { seen[p.topic] = true; topics.push(p.topic); }
+    }
+
+    const container = document.getElementById("problem-list");
+    for (const topic of topics) {
+      const group = PROBLEMS.filter(p => p.topic === topic);
+      const header = document.createElement("div");
+      header.className = "topic-header";
+      header.textContent = topic.toUpperCase();
+      container.appendChild(header);
+
+      const grid = document.createElement("div");
+      grid.className = "problem-grid";
+
+      for (const p of group) {
+        const done = Progress.has(p.code);
+        const a = document.createElement("a");
+        a.href = `problem.html?id=${p.id}`;
+        a.className = "problem-card" + (done ? " completed" : "");
+
+        const typeLabel = { coding: "CODE", mcq: "MCQ", trace: "TRACE", parsons: "SORT" };
+
+        a.innerHTML = `
+          <div class="card-num">CH${String(p.num).padStart(2,"0")}</div>
+          <div class="card-title">${p.title}</div>
+          <div class="card-meta">
+            <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
+            <span class="badge type">${typeLabel[p.type] || p.type.toUpperCase()}</span>
+            ${done ? '<span class="star">&#x2605;</span>' : ''}
+          </div>`;
+        grid.appendChild(a);
+      }
+      container.appendChild(grid);
+    }
+  }
+
+  runBoot();
+</script>
+</body>
+</html>
