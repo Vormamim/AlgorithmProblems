@@ -3,6 +3,26 @@ let pyodideLoading = false;
 let pyodideReady = false;
 const pyodideCallbacks = [];
 
+function formatPyodideError(err) {
+  const raw = String((err && err.message) || err || "").trim();
+  if (!raw) return "Runtime error";
+
+  const lines = raw
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean)
+    .filter(line => !line.startsWith("Traceback (most recent call last):"))
+    .filter(line => !line.startsWith("File \"/lib/python"))
+    .filter(line => line !== "^^^^^^^^^^" && line !== "^^^^^^^^^^^^^^" && line !== "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+  // Prefer the most specific terminal error line (e.g. SyntaxError, NameError).
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (/:\s/.test(lines[i])) return lines[i];
+  }
+
+  return lines[lines.length - 1] || "Runtime error";
+}
+
 async function loadPyodideOnce() {
   if (pyodideReady) return pyodide;
   if (pyodideLoading) {
@@ -19,7 +39,7 @@ async function runCode(code, onOutput) {
   const py = await loadPyodideOnce();
 
   py.setStdout({ batched: (text) => onOutput(text + "\n") });
-  py.setStderr({ batched: (text) => onOutput("[ERR] " + text + "\n") });
+  py.setStderr({ batched: (text) => onOutput(text + "\n") });
 
   const inputSetup = `
 import builtins as _bi, js as _js
@@ -35,7 +55,7 @@ _bi.input = _prompt_input
   try {
     await py.runPythonAsync(inputSetup + "\n" + code);
   } catch (err) {
-    onOutput("[ERR] " + err.message + "\n");
+    onOutput(formatPyodideError(err) + "\n");
   }
 }
 
@@ -48,7 +68,7 @@ async function runTests(studentCode, testCode, onOutput) {
 
   let rawOutput = "";
   py.setStdout({ batched: (t) => { rawOutput += t + "\n"; } });
-  py.setStderr({ batched: (t) => { rawOutput += "[ERR] " + t + "\n"; } });
+  py.setStderr({ batched: (t) => { rawOutput += t + "\n"; } });
 
   const fullCode = `
 import sys as _sys, builtins as _bi
@@ -83,7 +103,7 @@ ${testCode}
   try {
     await py.runPythonAsync(fullCode);
   } catch (err) {
-    rawOutput += "[ERR] " + err.message + "\n";
+    rawOutput += formatPyodideError(err) + "\n";
   }
 
   const marker = "__TESTS__:";
@@ -100,12 +120,12 @@ ${testCode}
   try {
     const results = eval(testLine.replace(/True/g, "true").replace(/False/g, "false"));
     if (!Array.isArray(results)) {
-      onOutput("[ERR] Invalid test result format\n");
+      onOutput("Invalid test result format\n");
       return null;
     }
     return results;
   } catch {
-    onOutput("[ERR] Could not parse test results\n");
+    onOutput("Could not parse test results\n");
     return null;
   }
 }

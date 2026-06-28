@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LBOA — Sandbox</title>
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
+</head>
+<body class="challenge-page sandbox-page">
+<div class="page-wrap sandbox-wrap">
+
+  <div class="breadcrumb">
+    <span class="breadcrumb-text"><a href="./index.html">[ HOME ]</a> &gt; SANDBOX</span>
+  </div>
+
+  <div id="pyodide-status" class="loading-bar">
+    LOADING PYTHON RUNTIME<span>...</span>
+  </div>
+
+  <div class="nes-container with-title" style="margin-bottom:20px">
+    <p class="title">PYTHON SANDBOX</p>
+    <div class="problem-description">
+      Freely test Python code. This page does not run challenge tests or unlock codes.
+    </div>
+  </div>
+
+  <div class="problem-layout">
+    <div class="editor-wrap">
+      <div class="nes-container with-title">
+        <p class="title">EDITOR</p>
+        <div class="editor-container">
+          <div class="line-numbers" id="line-numbers"></div>
+          <textarea id="code-editor" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="nes-btn is-primary" id="run-btn" disabled>▶ RUN</button>
+        <button class="nes-btn" id="reset-btn">↺ RESET</button>
+        <button class="nes-btn" id="copy-btn" title="Copy code to clipboard">📋 COPY</button>
+        <button class="nes-btn" id="save-btn" title="Download code">💾 SAVE</button>
+        <button class="nes-btn" id="load-btn" title="Load code file">📂 LOAD</button>
+      </div>
+    </div>
+    <div class="editor-wrap">
+      <div class="nes-container with-title">
+        <p class="title">OUTPUT</p>
+        <div class="terminal" id="terminal">
+          <span class="t-prompt">READY.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/runner.js"></script>
+<script src="js/sounds.js"></script>
+<script>
+  const editor = document.getElementById("code-editor");
+  const runBtn = document.getElementById("run-btn");
+  const resetBtn = document.getElementById("reset-btn");
+  const copyBtn = document.getElementById("copy-btn");
+  const saveBtn = document.getElementById("save-btn");
+  const loadBtn = document.getElementById("load-btn");
+  const terminal = document.getElementById("terminal");
+
+  const sandboxKey = "lboa_sandbox_code";
+  const defaultCode = [
+    "# LBOA Sandbox",
+    "# Write any Python here and press RUN",
+    "",
+    "print(\"Hello from sandbox\")"
+  ].join("\n");
+
+  editor.value = localStorage.getItem(sandboxKey) || defaultCode;
+
+  function clearTerminal() {
+    terminal.innerHTML = "";
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;");
+  }
+
+  function writeTerminal(text, cls = "") {
+    const span = document.createElement("span");
+    span.className = cls;
+    span.innerHTML = escHtml(text);
+    terminal.appendChild(span);
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  function updateLineNumbers() {
+    const lines = editor.value.split("\n").length;
+    const lineNumbersDiv = document.getElementById("line-numbers");
+    lineNumbersDiv.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join("<br>");
+  }
+
+  editor.addEventListener("input", () => {
+    localStorage.setItem(sandboxKey, editor.value);
+    updateLineNumbers();
+  });
+
+  editor.addEventListener("scroll", () => {
+    const lineNumbersDiv = document.getElementById("line-numbers");
+    lineNumbersDiv.scrollTop = editor.scrollTop;
+  });
+
+  editor.addEventListener("keydown", e => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const s = editor.selectionStart;
+      const end = editor.selectionEnd;
+      editor.value = editor.value.slice(0, s) + "    " + editor.value.slice(end);
+      editor.selectionStart = editor.selectionEnd = s + 4;
+      localStorage.setItem(sandboxKey, editor.value);
+      updateLineNumbers();
+    }
+  });
+
+  runBtn.addEventListener("click", async () => {
+    Sounds.blip();
+    runBtn.disabled = true;
+    clearTerminal();
+    writeTerminal("▶ RUN\n", "t-prompt");
+    await runCode(editor.value, t => writeTerminal(t));
+    runBtn.disabled = false;
+  });
+
+  resetBtn.addEventListener("click", () => {
+    Sounds.nav();
+    editor.value = defaultCode;
+    localStorage.setItem(sandboxKey, editor.value);
+    updateLineNumbers();
+    clearTerminal();
+    writeTerminal("READY.", "t-prompt");
+  });
+
+  copyBtn.addEventListener("click", () => {
+    Sounds.blip();
+    navigator.clipboard.writeText(editor.value).then(() => {
+      const origText = copyBtn.textContent;
+      copyBtn.textContent = "✓ COPIED";
+      setTimeout(() => { copyBtn.textContent = origText; }, 1500);
+    }).catch(() => {
+      copyBtn.textContent = "✗ FAILED";
+      setTimeout(() => { copyBtn.textContent = "📋 COPY"; }, 1500);
+    });
+  });
+
+  saveBtn.addEventListener("click", () => {
+    Sounds.blip();
+    const name = (prompt("Filename (without extension):", "sandbox-code") || "sandbox-code").trim() || "sandbox-code";
+    const blob = new Blob([editor.value], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${name}.py`;
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = ".py,.txt";
+  fileInput.style.display = "none";
+  document.body.appendChild(fileInput);
+
+  loadBtn.addEventListener("click", () => {
+    Sounds.blip();
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      editor.value = String(event.target.result || "");
+      localStorage.setItem(sandboxKey, editor.value);
+      updateLineNumbers();
+      Sounds.success();
+    };
+    reader.readAsText(file);
+    fileInput.value = "";
+  });
+
+  loadPyodideOnce().then(() => {
+    document.getElementById("pyodide-status").style.display = "none";
+    runBtn.disabled = false;
+  });
+
+  updateLineNumbers();
+</script>
+</body>
+</html>

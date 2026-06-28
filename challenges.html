@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LBOA — Challenges</title>
+  <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+<!-- Boot sequence -->
+<div id="boot-screen">
+  <pre id="boot-text"></pre>
+  <div id="boot-cursor"></div>
+</div>
+
+<!-- Main content (hidden until boot finishes) -->
+<div id="main-content" style="display:none">
+  <div class="page-wrap index-layout">
+    <section class="lessons-panel nes-container challenges-main">
+      <div class="lessons-header">
+        <div>
+          <h2>LESSON PATHWAY</h2>
+          <p class="subtitle">Choose a lesson to begin.</p>
+          <div class="challenge-instructions">
+            <p>Select any challenge card to open the coding task.</p>
+            <p>Completed challenges are marked with a ★ star.</p>
+          </div>
+        </div>
+        <a class="sandbox-switch" href="sandbox.html" title="Switch to sandbox">
+          <div class="sandbox-switch-label">SWITCH TO SANDBOX</div>
+          <img src="sandbox.png" alt="Sandbox graphic" class="sandbox-switch-image">
+        </a>
+      </div>
+
+      <div id="problem-list" class="problem-list"></div>
+    </section>
+
+  </div>
+</div>
+
+<script src="js/problems.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/sounds.js"></script>
+<script>
+  const BOOT_LINES = [
+    "    **** VORMAMIM LBOA ALGORITHMS TRAINER V2.01 ****",
+    "",
+    " 48K RAM SYSTEM  38911 BASIC BYTES FREE",
+    "",
+    "LOADING PROBLEM SET...",
+    "",
+    "READY.",
+    ""
+  ];
+
+  async function runBoot() {
+    const el = document.getElementById("boot-text");
+    for (const line of BOOT_LINES) {
+      for (const ch of line) {
+        el.textContent += ch;
+        await sleep(12);
+      }
+      el.textContent += "\n";
+      await sleep(80);
+    }
+    await sleep(600);
+    document.getElementById("boot-screen").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
+    renderPage();
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function renderPage() {
+    const topics = [];
+    const seen = {};
+    for (const p of PROBLEMS) {
+      if (!seen[p.topic]) { seen[p.topic] = true; topics.push(p.topic); }
+    }
+
+    const container = document.getElementById("problem-list");
+    for (const topic of topics) {
+      const group = PROBLEMS.filter(p => p.topic === topic);
+      const header = document.createElement("div");
+      header.className = "topic-header";
+      header.textContent = topic.toUpperCase();
+      container.appendChild(header);
+
+      const grid = document.createElement("div");
+      grid.className = "problem-grid";
+
+      for (const p of group) {
+        const done = Progress.has(p.id);
+        const a = document.createElement("a");
+        a.href = `problem.html?id=${p.id}`;
+        a.className = "problem-card" + (done ? " completed" : "");
+        a.addEventListener("click", () => Sounds.nav());
+
+        const typeLabel = { coding: "CODE", mcq: "MCQ", trace: "TRACE", parsons: "SORT" };
+
+        a.innerHTML = `
+          <div class="card-num">CH${String(p.num).padStart(2,"0")}</div>
+          <div class="card-title">${p.title}</div>
+          <div class="card-meta">
+            <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
+            <span class="badge type">${typeLabel[p.type] || p.type.toUpperCase()}</span>
+            ${done ? '<span class="star">&#x2605;</span>' : ''}
+          </div>`;
+        grid.appendChild(a);
+      }
+      container.appendChild(grid);
+    }
+  }
+
+  runBoot();
+</script>
+</body>
+</html>

@@ -42,7 +42,7 @@
 <div class="page-wrap">
 
   <div class="breadcrumb">
-    <span class="breadcrumb-text"><a href="index.html">[ HOME ]</a> &gt; <span id="breadcrumb-title">...</span></span>
+    <span class="breadcrumb-text"><a href="./challenges.html">[ HOME ]</a> &gt; <span id="breadcrumb-title">...</span></span>
     <button class="nes-btn" id="cheatsheet-btn" title="Open Python cheatsheet" style="margin-left: auto;">📚 HELP</button>
   </div>
 
@@ -70,7 +70,6 @@
         </div>
         <div class="btn-row">
           <button class="nes-btn is-primary" id="run-btn" disabled>▶ RUN</button>
-          <button class="nes-btn" id="check-btn" disabled>✓ CHECK</button>
           <button class="nes-btn" id="reset-btn">↺ RESET</button>
           <button class="nes-btn" id="copy-btn" title="Copy code to clipboard">📋 COPY</button>
           <button class="nes-btn" id="save-btn" title="Save code to local storage">💾 SAVE</button>
@@ -135,8 +134,8 @@
         <p style="font-size:7px; color:var(--amber-dim)">Write it down or take a screenshot!</p>
         <div class="btn-row" style="justify-content:center; margin-top:16px; gap:12px">
           <button class="nes-btn is-success">COLLECT IT!</button>
-          <a class="nes-btn" id="dialog-next-btn" href="index.html">NEXT &gt;</a>
-          <a class="nes-btn" href="index.html">HOME</a>
+          <a class="nes-btn" id="dialog-next-btn" href="./challenges.html">NEXT &gt;</a>
+          <a class="nes-btn" href="./challenges.html">HOME</a>
         </div>
       </div>
     </form>
@@ -372,7 +371,7 @@ str(42)            # convert to string</pre>
       dialogNext.href = problemUrl(next);
       dialogNext.textContent = "NEXT >";
     } else {
-      dialogNext.href = "index.html";
+      dialogNext.href = "./challenges.html";
       dialogNext.textContent = "HOME";
     }
 
@@ -427,14 +426,12 @@ str(42)            # convert to string</pre>
     });
 
     const runBtn = document.getElementById("run-btn");
-    const checkBtn = document.getElementById("check-btn");
     const resetBtn = document.getElementById("reset-btn");
 
     // Start loading Pyodide immediately
     loadPyodideOnce().then(() => {
       document.getElementById("pyodide-status").style.display = "none";
       runBtn.disabled = false;
-      checkBtn.disabled = false;
     });
 
     runBtn.addEventListener("click", async () => {
@@ -444,28 +441,6 @@ str(42)            # convert to string</pre>
       writeTerminal("▶ RUN\n", "t-prompt");
       await runCode(editor.value, t => writeTerminal(t));
       runBtn.disabled = false;
-    });
-
-    checkBtn.addEventListener("click", async () => {
-      Sounds.blip();
-      checkBtn.disabled = true;
-      runBtn.disabled = true;
-      clearTerminal();
-      writeTerminal("✓ RUNNING TESTS...\n", "t-prompt");
-      document.getElementById("test-results").innerHTML = "";
-
-      const results = await runTests(editor.value, p.testCode, t => writeTerminal(t));
-      runBtn.disabled = false;
-      checkBtn.disabled = false;
-
-      if (!results) {
-        Sounds.fail();
-        writeTerminal("\n[ERR] Could not run tests — check for syntax errors.\n", "t-error");
-        showFailModal("CODE ERROR");
-        return;
-      }
-
-      renderTestResults(results, p);
     });
 
     resetBtn.addEventListener("click", () => {
@@ -588,7 +563,7 @@ str(42)            # convert to string</pre>
     // Empty or malformed results = failure (prevents free code reveal when testCode produces no output)
     if (!Array.isArray(results) || results.length === 0) {
       Sounds.fail();
-      writeTerminal("\n[ERR] No test results — check for syntax errors.\n", "t-error");
+        writeTerminal("\nNo test results — check for syntax errors.\n", "t-error");
       showFailModal("0 / 0 PASSED");
       return;
     }

@@ -17,47 +17,36 @@
 
 <!-- Main content (hidden until boot finishes) -->
 <div id="main-content" style="display:none">
-  <div class="page-wrap index-layout">
+  <div class="page-wrap launcher-layout nes-container">
+    <div class="site-header launcher-header">
+      <h1>&#x2605; VORMAMIM's LBOA &#x2605;</h1>
+      <p class="subtitle">Choose where you want to code.</p>
+    </div>
 
-    <aside class="sidebar nes-container">
-      <div class="site-header sidebar-header">
-        <h1>&#x2605; LBOA &#x2605;</h1>
-        <p class="subtitle">The Little Book of Algorithms &mdash; Python Pathway</p>
-      </div>
-
-      <div class="progress-area">
-        <div class="progress-label">
-          CODES COLLECTED: <span id="collected-count">0</span> / 48
+    <div class="launcher-grid">
+      <a class="launcher-card sandbox" href="sandbox.html" id="launcher-sandbox">
+        <div class="launcher-tag">LOFIPY</div>
+        <div class="launcher-media">
+          <img src="sandbox.png" alt="Sandbox preview" class="launcher-image">
         </div>
-        <progress id="progress-bar" class="nes-progress is-warning" value="0" max="48"></progress>
-      </div>
+        <h2>PYTHON SANDBOX</h2>
+        <p>Open a free IDE with RUN, RESET, COPY, LOAD, and SAVE.</p>
+      </a>
 
-      <div class="info-card">
-        <p class="panel-title">Lesson Hub</p>
-        <p>Select a lesson from the pathway and collect your secret code.</p>
-        <p>Completed challenges are marked with a ★ star.</p>
-        <a href="validate.html" class="nes-btn is-primary">VALIDATE CODES</a>
-      </div>
-
-      <div id="index-sound-btn" class="sound-panel"></div>
-    </aside>
-
-    <section class="lessons-panel nes-container">
-      <div class="lessons-header">
-        <div>
-          <h2>LESSON PATHWAY</h2>
-          <p class="subtitle">Choose a lesson to begin.</p>
+      <a class="launcher-card challenges" href="challenges.html" id="launcher-challenges">
+        <div class="launcher-tag">PATHWAY</div>
+        <div class="launcher-media">
+          <img src="closeup.png" alt="Challenges preview" class="launcher-image">
         </div>
-        <div class="lesson-summary">Navigate the right-hand lesson grid.</div>
-      </div>
+        <h2>ALGORITHM PUZZLES</h2>
+        <p>Try to complete all 45 challenge problems.</p>
+      </a>
+    </div>
 
-      <div id="problem-list" class="problem-list"></div>
-    </section>
-
+    <div id="index-sound-btn" class="sound-panel launcher-sound"></div>
   </div>
 </div>
 
-<script src="js/problems.js"></script>
 <script src="js/progress.js"></script>
 <script src="js/sounds.js"></script>
 <script>
@@ -67,10 +56,11 @@
     "",
     " 48K RAM SYSTEM  38911 BASIC BYTES FREE",
     "",
-    "LOADING PROBLEM SET...",
+    "LOADING PROBLEM SET and browser side Python runtime...",
     "",
     "READY.",
-    ""
+    "Designed for educational purposes. No personal data is collected.",
+    "Dean Groom (c) 2024-26. All rights reserved.",
   ];
 
   async function runBoot() {
@@ -86,55 +76,16 @@
     await sleep(600);
     document.getElementById("boot-screen").style.display = "none";
     document.getElementById("main-content").style.display = "block";
-    renderPage();
+    initLauncher();
   }
 
   function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-  // ── Render ──
-  function renderPage() {
-    const count = Progress.count();
-    document.getElementById("collected-count").textContent = count;
-    document.getElementById("progress-bar").value = count;
-
-    const topics = [];
-    const seen = {};
-    for (const p of PROBLEMS) {
-      if (!seen[p.topic]) { seen[p.topic] = true; topics.push(p.topic); }
-    }
-
-    const container = document.getElementById("problem-list");
-    for (const topic of topics) {
-      const group = PROBLEMS.filter(p => p.topic === topic);
-      const header = document.createElement("div");
-      header.className = "topic-header";
-      header.textContent = topic.toUpperCase();
-      container.appendChild(header);
-
-      const grid = document.createElement("div");
-      grid.className = "problem-grid";
-
-      for (const p of group) {
-        const done = Progress.has(p.id);
-        const a = document.createElement("a");
-        a.href = `problem.html?id=${p.id}`;
-        a.className = "problem-card" + (done ? " completed" : "");
-        a.addEventListener("click", () => Sounds.nav());
-
-        const typeLabel = { coding: "CODE", mcq: "MCQ", trace: "TRACE", parsons: "SORT" };
-
-        a.innerHTML = `
-          <div class="card-num">CH${String(p.num).padStart(2,"0")}</div>
-          <div class="card-title">${p.title}</div>
-          <div class="card-meta">
-            <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
-            <span class="badge type">${typeLabel[p.type] || p.type.toUpperCase()}</span>
-            ${done ? '<span class="star">&#x2605;</span>' : ''}
-          </div>`;
-        grid.appendChild(a);
-      }
-      container.appendChild(grid);
-    }
+  function initLauncher() {
+    const sandbox = document.getElementById("launcher-sandbox");
+    const challenges = document.getElementById("launcher-challenges");
+    sandbox.addEventListener("click", () => Sounds.nav());
+    challenges.addEventListener("click", () => Sounds.nav());
   }
 
   Sounds.initBtn(document.getElementById('index-sound-btn'));

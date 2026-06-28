@@ -156,6 +156,144 @@ a:hover {
   overflow: hidden;
 }
 
+.page-wrap.index-layout:has(.challenges-main) {
+  grid-template-columns: 1fr;
+  width: min(1440px, 98vw);
+}
+
+.page-wrap.launcher-layout {
+  width: min(1200px, 96vw);
+  min-height: min(720px, 90vh);
+  margin: 24px auto;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  background: rgba(5, 4, 0, 0.90);
+  border: 2px solid var(--border);
+  border-radius: 28px;
+  box-shadow: 0 0 36px rgba(255, 176, 0, 0.12);
+}
+
+.launcher-header {
+  text-align: center;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.launcher-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 24px;
+  flex: 1;
+}
+
+.launcher-card {
+  position: relative;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  color: var(--amber);
+  padding: 28px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  min-height: 260px;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: launcherEnter 0.45s ease forwards;
+}
+
+.launcher-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.launcher-card:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+.launcher-card:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 14px var(--amber-dim);
+  transform: translateY(-4px) scale(1.01);
+  text-decoration: none;
+}
+
+.launcher-media {
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.launcher-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.88) contrast(1.04);
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.launcher-card:hover .launcher-image {
+  transform: scale(1.05);
+  filter: saturate(1.02) contrast(1.08);
+}
+
+.launcher-card h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--amber-glow);
+}
+
+.launcher-card p {
+  margin: 0;
+  font-size: 9px;
+  line-height: 1.8;
+  color: var(--amber);
+}
+
+.launcher-tag {
+  display: inline-block;
+  width: fit-content;
+  font-size: 8px;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  color: var(--amber-dim);
+}
+
+.launcher-card.sandbox {
+  background: linear-gradient(160deg, rgba(0, 45, 20, 0.42), rgba(26, 21, 0, 0.88));
+}
+
+.launcher-card.challenges {
+  background: linear-gradient(160deg, rgba(45, 20, 0, 0.42), rgba(26, 21, 0, 0.88));
+}
+
+.launcher-sound {
+  margin-top: auto;
+}
+
+@keyframes launcherEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sandbox-wrap {
+  max-width: 1220px;
+}
+
 .sidebar,
 .lessons-panel {
   min-height: 0;
@@ -198,11 +336,71 @@ a:hover {
   font-size: 14px;
 }
 
+.challenge-instructions {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.24);
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.challenge-instructions p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.9;
+  color: var(--amber-dim);
+}
+
+.challenge-instructions p + p {
+  margin-top: 10px;
+}
+
 .lesson-summary {
   font-size: 8px;
   color: var(--amber-dim);
   text-align: right;
   max-width: 220px;
+}
+
+.sandbox-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  max-width: 260px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(0, 40, 18, 0.35);
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.sandbox-switch:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 10px var(--amber-dim);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.sandbox-switch-label {
+  font-size: 8px;
+  color: var(--amber-glow);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.sandbox-switch-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: block;
 }
 
 .info-card {
@@ -526,6 +724,10 @@ a:hover {
   color: var(--text);
   overflow-x: auto;
   font-family: 'Press Start 2P', monospace;
+}
+
+body.challenge-page #check-btn {
+  display: none !important;
 }
 
 /* ── Terminal output ── */
