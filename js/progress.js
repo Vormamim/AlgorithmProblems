@@ -1,22 +1,26 @@
-const STORAGE_KEY = "lboa_collected_codes";
+const STORAGE_KEY = "lboa_progress_v2";
 
 const Progress = {
   getAll() {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
     } catch {
       return {};
     }
   },
 
-  collect(code) {
+  collect(problemId, code) {
     const all = this.getAll();
-    all[code] = Date.now();
+    all[problemId] = code;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
   },
 
-  has(code) {
-    return !!this.getAll()[code];
+  has(problemId) {
+    return !!this.getAll()[problemId];
+  },
+
+  getCode(problemId) {
+    return this.getAll()[problemId] || null;
   },
 
   count() {

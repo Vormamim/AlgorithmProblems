@@ -7,7 +7,7 @@ An interactive, browser-based Python coding trainer built on the content of *The
 - **48 challenges** across 8 topics, from beginner if-statements to advanced file I/O, sorting, and binary conversion
 - **Four problem types**: coding (with auto-testing), multiple choice, Parsons puzzles (drag-and-drop code ordering), and tracing/analysis
 - **Live Python in the browser** via [Pyodide](https://pyodide.org) — students write and run real Python without installing anything
-- **Hash code system** — each challenge has a unique code revealed only when the student passes all tests; no personal data is stored
+- **Hash code system** — each challenge has a unique code derived from SHA-256, revealed only when the student passes all tests; codes change if the teacher rotates the classroom salt; no personal data is stored
 - **Teacher validator** — paste a student's codes to see exactly which challenges they completed, no login needed
 - **C64 amber-phosphor aesthetic** using [NES.css](https://nostalgic-css.github.io/NES.css/) and Press Start 2P font, with CRT scanline overlay
 - **Prev/next navigation** and keyboard shortcuts (← →) between problems
@@ -51,7 +51,9 @@ Open `index.html` in any modern browser. An internet connection is required on f
 
 ## Code Format
 
-All codes follow the format `LBOA-XXXX` (e.g. `LBOA-F1A2`). They are static constants baked into `problems.js` — no server or database is involved.
+Codes follow the format `LBOA-XXXX-XXXX` (e.g. `LBOA-C2J1-EDYY`). They are computed in the browser from a SHA-256 hash of the problem ID and a classroom salt defined in `js/codes.js`. No server or database is involved.
+
+**Changing the salt** (`_SALT` in `js/codes.js`) invalidates all existing codes — useful at the start of a new academic year to prevent code-sharing between cohorts.
 
 ## Tech Stack
 

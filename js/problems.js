@@ -6,7 +6,6 @@ const PROBLEMS = [
     topic: "If Statements",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-F1A2",
     description: `Write a function called <code>highest_number</code> with three parameters: <code>num1</code>, <code>num2</code> and <code>num3</code>. The function should <strong>return</strong> the highest of the three numbers.`,
     starterCode: `def highest_number(num1, num2, num3):
     if num1 >= num2 and num1 >= num3:
@@ -39,7 +38,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-G3B4",
     description: `Using your <code>highest_number</code> function from Challenge 1, write a complete program that:<br><br>
 1. Asks the user to enter three integers<br>
 2. Calls <code>highest_number</code> with those values<br>
@@ -89,7 +87,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-H5C6",
     description: `Complete the function <code>options(num)</code>. It takes a number as an argument and returns the matching subject:<br><br>
 <code>1</code> → Computer Science<br>
 <code>2</code> → Music<br>
@@ -120,7 +117,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-J7D8",
     description: `Write a program that calls your <code>options</code> function from Challenge 3. Ask the user to enter a number (1–4), then print a meaningful confirmation message like <em>"You chose Computer Science"</em>. If they enter an invalid number, print an appropriate error message.`,
     starterCode: `def options(num):
     if num == 1:
@@ -167,7 +163,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "mcq",
-    code: "LBOA-K9E0",
     description: `Study the program below and answer the questions.<br><br>
 <pre>def mystery_number(num):
     if num &lt; 5:
@@ -211,7 +206,6 @@ mystery_number(num_in)</pre>`,
     topic: "If Statements",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-L1F3",
     description: `Re-write <code>mystery_number(num)</code> so that:<br><br>
 • Output is <code>1</code> if num is <code>3</code><br>
 • Output is <code>8</code> if num is less than 5 (but not 3)<br>
@@ -240,7 +234,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "parsons",
-    code: "LBOA-M2G5",
     description: `Re-arrange the code blocks into the correct order. The function <code>subtract(num1, num2)</code> should subtract the <em>smallest</em> number from the <em>largest</em> and return the result.`,
     blocks: [
       "def subtract(num1, num2):",
@@ -259,7 +252,6 @@ print("__TESTS__:" + repr(_results))
     topic: "If Statements",
     difficulty: "beginner",
     type: "mcq",
-    code: "LBOA-N4H7",
     description: `Answer the multiple choice questions about functions and if statements.`,
     questions: [
       {
@@ -301,7 +293,6 @@ print("__TESTS__:" + repr(_results))
     topic: "String Slicing",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-P6J9",
     description: `Write a function <code>initials_only(first, middle, last)</code> that takes three name strings and returns only the first letter of each, e.g. <code>initials_only("Ada", "Byron", "Lovelace")</code> → <code>"ABL"</code>`,
     starterCode: `def initials_only(first, middle, last):
     initials =
@@ -329,7 +320,6 @@ print("__TESTS__:" + repr(_results))
     topic: "String Slicing",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-Q8K1",
     description: `Write a function <code>subject_shortener(subject)</code> that returns the first 3 characters of the subject name, e.g. <code>"Maths"</code> → <code>"Mat"</code>, <code>"French"</code> → <code>"Fre"</code>`,
     starterCode: `def subject_shortener(subject):
     `,
@@ -351,7 +341,6 @@ print("__TESTS__:" + repr(_results))
     topic: "String Slicing",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-R0L2",
     description: `Write a function <code>cuboid_volume(length, width, height)</code> that takes three numbers and returns the volume of the cuboid (length × width × height).`,
     starterCode: `def cuboid_volume(length, width, height):
     `,
@@ -373,7 +362,6 @@ print("__TESTS__:" + repr(_results))
     topic: "String Slicing",
     difficulty: "beginner",
     type: "coding",
-    code: "LBOA-S3M4",
     description: `Write a function called <code>add(num1, num2)</code> that adds the two numbers and returns the sum.`,
     starterCode: `def add(num1, num2):
     `,
@@ -395,7 +383,6 @@ print("__TESTS__:" + repr(_results))
     topic: "String Slicing",
     difficulty: "beginner",
     type: "mcq",
-    code: "LBOA-T5N6",
     description: `Answer the questions about string slicing and operators.`,
     questions: [
       {
@@ -432,7 +419,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-U7P8",
     description: `Re-write <code>is_odd(number_in)</code> as a <strong>function</strong> (not a procedure) so it <em>returns</em> a string instead of printing. All inputs and outputs should happen outside the function. Your program should keep asking for numbers until <code>"STOP"</code> is entered.`,
     starterCode: `def is_odd(number_in):
     if int(number_in) % 2 == 0:
@@ -460,13 +446,12 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-V9Q0",
     description: `Write a function <code>is_multiple(x_in, y_in)</code> that checks if <code>x_in</code> is a multiple of <code>y_in</code> using the modulo operator and prints a meaningful message.`,
     starterCode: `def is_multiple(x_in, y_in):
     if x_in % y_in == 0:
-        print(x_in, "is a multiple of", y_in)
+        pass  # TODO: print that x_in is a multiple of y_in
     else:
-        print(x_in, "is not a multiple of", y_in)
+        pass  # TODO: print that x_in is not a multiple of y_in
 `,
     testCode: `
 import sys as _sys
@@ -490,7 +475,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "mcq",
-    code: "LBOA-W1R3",
     description: `The <code>//</code> operator is integer division (DIV). Study this program:<br><br>
 <pre>def div(num1_in, num2_in):
     out = (num1_in + num2_in) // 10
@@ -525,7 +509,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-X2S5",
     description: `Complete the acronym generator. The program should keep asking the user to enter words until <code>"XXX"</code> is entered. When the sentinel value is entered, print the acronym formed from the first letter of each word entered.`,
     starterCode: `sentinel = "XXX"
 word = ""
@@ -533,7 +516,7 @@ acronym = ""
 while word != sentinel:
     word = input('Enter a word or XXX to finish: ')
     if word != sentinel:
-        acronym = acronym + word[0]
+        pass  # TODO: add the first letter of word to acronym
 
 print(acronym)
 `,
@@ -564,7 +547,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-Y4T7",
     description: `Write a more efficient version that takes all words as one input string (e.g. <code>"British Broadcasting Corporation"</code>), splits it into a list, then generates the acronym by taking the first character of each word.`,
     starterCode: `acronym = ""
 words = input("Enter words to be turned into an acronym: ")
@@ -600,7 +582,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-Z6U9",
     description: `Simulate two dice being rolled. Keep rolling until both dice show the same value (a double). Output the values of each roll, and when a double is rolled print <code>"Game loading"</code>.`,
     starterCode: `import random
 
@@ -613,7 +594,7 @@ while dice1 != dice2:
     print("Dice 1:", dice1)
     print("Dice 2:", dice2)
     if dice1 == dice2:
-        print("Game loading")
+        pass  # TODO: print "Game loading" when a double is rolled
     else:
         input("Press Enter to roll again")
 `,
@@ -651,7 +632,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-A8V1",
     description: `Simulate two dice being rolled <strong>three times</strong> using a <code>for</code> loop. Output the total for each round and the final total score after 3 rounds.`,
     starterCode: `import random
 
@@ -694,7 +674,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-B0W2",
     description: `Write a program that iterates through the list below and outputs the highest number using a <code>for</code> loop and an if statement. Do <strong>not</strong> use Python's built-in <code>max()</code> function.<br><br>
 <code>numbers = [9, 8, 72, 22, 21, 81, 2, 1]</code>`,
     starterCode: `numbers = [9, 8, 72, 22, 21, 81, 2, 1]
@@ -722,7 +701,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-C3X4",
     description: `Re-write your solution from Challenge 21 as a function <code>highest_num(numbers_in)</code> that takes a list as a parameter and <strong>returns</strong> the highest number.`,
     starterCode: `def highest_num(numbers_in):
     highest = numbers_in[0]
@@ -756,7 +734,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-D5Y6",
     description: `Write a program that asks for a password and performs a linear search through this list of obvious passwords:<br><br>
 <code>obvious = ["password", "qwerty", "hello123", "letmein", "123456"]</code><br><br>
 If the password is found in the list, print a message saying it is weak and susceptible to brute-force attacks.`,
@@ -790,7 +767,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-E7Z8",
     description: `Extend your password checker with validation checks:<br><br>
 • <strong>Length check</strong>: warn if fewer than 8 characters<br>
 • <strong>Number check</strong>: suggest adding numbers if none present<br>
@@ -839,7 +815,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-F9A0",
     description: `Simulate a penalty shootout over 5 rounds. The computer (goalkeeper) randomly dives left, centre, or right. The user types their shot direction. If the keeper dives the same way, it's saved; otherwise it's a goal. After 5 penalties, announce the winner.`,
     starterCode: `import random
 
@@ -886,7 +861,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Loops",
     difficulty: "intermediate",
     type: "mcq",
-    code: "LBOA-G1B3",
     description: `Study this program:<br><br>
 <pre>y = 0
 for x in range(0, 4):
@@ -923,7 +897,6 @@ for x in range(0, 4):
     topic: "Loops",
     difficulty: "intermediate",
     type: "mcq",
-    code: "LBOA-H2C5",
     description: `Based on this code:<br><code>import random<br>for count in range(0, 5):<br>&nbsp;&nbsp;num1 = random.randint(1, 10)</code>`,
     questions: [
       {
@@ -950,7 +923,6 @@ for x in range(0, 4):
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-J4D7",
     description: `Write a function <code>mean_of_list(numbers_list_in)</code> that takes a list of numbers as an argument and returns the mean average. Then write a <code>main()</code> function that contains your list and calls the function.`,
     starterCode: `def mean_of_list(numbers_list_in):
     total = 0
@@ -989,7 +961,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-K6E9",
     description: `Write a function <code>vowel_counter(sentence)</code> that iterates through the sentence and counts how many times each vowel (A, E, I, O, U) appears. Output the count for each vowel.`,
     starterCode: `def vowel_counter(sentence):
     A = 0
@@ -1030,7 +1001,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-L8F1",
     description: `Write a function that takes a desired grade as an argument and searches the 2D list below to return the number of marks required.<br><br>
 <code>grades = [["A*","90"],["A","83"],["B","72"],["C","60"],["D","49"],["E","30"]]</code>`,
     starterCode: `def marks(grade_in):
@@ -1061,7 +1031,6 @@ print("__TESTS__:" + repr(_results))
     topic: "2D Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-M0G2",
     description: `Re-write <code>vowel_counter</code> using a 2D list to track each vowel and its count. Each sub-list should contain the vowel letter and its count, e.g. <code>[["A", 0], ["E", 0], ...]</code>`,
     starterCode: `def vowel_counter(sentence):
     vowel_list = [["A", 0], ["E", 0], ["I", 0], ["O", 0], ["U", 0]]
@@ -1097,7 +1066,6 @@ print("__TESTS__:" + repr(_results))
     topic: "2D Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-N3H4",
     description: `Using the 2D list below, write a program that outputs the total for each exam with a meaningful message. The outer loop should iterate over exams (columns 1–3), the inner loop over students.<br><br>
 <pre>cs_scores = [["Karman","45","60","72"],
              ["Daniel","55","65","70"],
@@ -1142,7 +1110,6 @@ print("__TESTS__:" + repr(_results))
     topic: "2D Lists",
     difficulty: "intermediate",
     type: "coding",
-    code: "LBOA-P5J6",
     description: `Using the 2D list, write a program that outputs the mean average for each student across their 3 exam scores.<br><br>
 <pre>cs_scores = [["Theo","45","60","72"],["Angharad","55","65","70"],
 ["Sameer","71","78","78"],["Adrian","68","79","80"],["Ayana","98","85","91"]]</pre>`,
@@ -1183,14 +1150,13 @@ print("__TESTS__:" + repr(_results))
     topic: "2D Lists",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-Q7K8",
     description: `Re-write Challenge 33 as a function <code>mean_student(scores_in)</code> that takes the 2D list as a parameter and outputs the mean average for each student.`,
     starterCode: `def mean_student(scores_in):
     total = 0
     for student in range(len(scores_in)):
         for exam in range(1, 4):
             total = total + int(scores_in[student][exam])
-        mean = total / 3
+        mean = 0  # TODO: calculate the mean average from total
         print(scores_in[student][0], "average:", mean)
         total = 0
 
@@ -1220,7 +1186,6 @@ print("__TESTS__:" + repr(_results))
     topic: "2D Lists",
     difficulty: "intermediate",
     type: "mcq",
-    code: "LBOA-R9L0",
     description: `Study this program:<br><br>
 <pre>animals = [["Charlie", "Dog", 8],
            ["Dolly", "Sheep", 3],
@@ -1254,7 +1219,6 @@ for x in range(len(animals)):
     topic: "2D Lists",
     difficulty: "intermediate",
     type: "mcq",
-    code: "LBOA-S1M3",
     description: `Based on this code:<br><pre>for x in range(0, 3):\n  for y in range(2, 5):\n    z = x + y\n    print(z)</pre>`,
     questions: [
       {
@@ -1281,7 +1245,6 @@ for x in range(len(animals)):
     topic: "File I/O",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-T2N5",
     description: `Write a function <code>generate_username(firstname, lastname)</code> that creates a username as <code>lastname + firstname[0]</code> (e.g. "LauW"). Check if it already exists in the list below and if so, append <code>"#"</code> to make it unique. Return the final username.<br><br>
 <em>Note: instead of a file, use the list provided directly:</em><br>
 <code>existing = [["LauW","pwd1"],["VegaJ","pwd2"],["LassamiL","pwd3"]]</code>`,
@@ -1290,7 +1253,7 @@ for x in range(len(animals)):
     existing = [["LauW","pwd1"],["VegaJ","pwd2"],["LassamiL","pwd3"]]
     for count in range(len(existing)):
         if existing[count][0] == username:
-            username = username + "#"
+            pass  # TODO: make the username unique if it already exists
     return username
 
 `,
@@ -1316,34 +1279,40 @@ print("__TESTS__:" + repr(_results))
     topic: "File I/O",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-U4P7",
     description: `Write a complete program that asks for a teacher's first name and surname, calls <code>generate_username</code>, and prints the generated username with a meaningful message.`,
     starterCode: `def generate_username(firstname, lastname):
     username = lastname + firstname[0]
     existing = [["LauW","pwd1"],["VegaJ","pwd2"],["LassamiL","pwd3"]]
     for count in range(len(existing)):
         if existing[count][0] == username:
-            username = username + "#"
+            pass  # TODO: make the username unique if it already exists
     return username
 
 first = input("Enter first name: ")
 last = input("Enter surname: ")
 `,
     testCode: `
-import sys as _sys, builtins as _bi
-from io import StringIO as _StringIO
+_results = []
+try:
+    _r = generate_username("Zara", "Jones")
+    _results.append(("generate_username('Zara','Jones') → 'JonesZ'", _r == "JonesZ", f"Expected 'JonesZ', got '{_r}'"))
+    _r2 = generate_username("Winnie", "Lau")
+    _results.append(("generate_username handles duplicate → 'LauW#'", _r2 == "LauW#", f"Expected 'LauW#', got '{_r2}'"))
+except NameError:
+    _results.append(("generate_username is defined", False, "Function not found — check spelling"))
+except Exception as _e:
+    _results.append(("generate_username works", False, str(_e)))
+
 _cap = _StringIO()
 _sys.stdout = _cap
-_bi.input = lambda p="": "Zara" if "first" in p.lower() else "Jones"
-first = input("Enter first name: ")
-last = input("Enter surname: ")
-username_out = generate_username(first, last)
-print("Your username is", username_out)
+_bi.input = lambda p='': "Zara" if "first" in p.lower() else "Jones"
+try:
+    exec(__student_code__, {'__builtins__': __builtins__})
+except Exception:
+    pass
 _sys.stdout = _sys.__stdout__
 _out = _cap.getvalue()
-_results = [
-    ("Username JonesZ printed", "JonesZ" in _out, f"Output: {_out.strip()}"),
-]
+_results.append(("Program prints generated username", "JonesZ" in _out, f"Output: {_out.strip()[:80]}"))
 print("__TESTS__:" + repr(_results))
 `
   },
@@ -1354,14 +1323,11 @@ print("__TESTS__:" + repr(_results))
     topic: "File I/O",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-V6Q9",
     description: `Write a function <code>new_user(username_in, password_in, users)</code> that takes a 2D list of users, appends a new <code>[username, password]</code> sub-list, and returns the updated list.<br><br>
 <em>(In this browser version we skip file I/O — pass and return the list directly.)</em>`,
     starterCode: `def new_user(username_in, password_in, users):
     new_entry = []
-    new_entry.append(username_in)
-    new_entry.append(password_in)
-    users.append(new_entry)
+    # TODO: add username_in and password_in to new_entry, then append new_entry to users
     return users
 
 users = [["lauw","insecurePwd"],["vegaj","iLoveWebDesign"]]
@@ -1386,7 +1352,6 @@ print("__TESTS__:" + repr(_results))
     topic: "File I/O",
     difficulty: "advanced",
     type: "mcq",
-    code: "LBOA-W8R1",
     description: `Answer the multiple choice questions about file operations in Python.`,
     questions: [
       {
@@ -1423,7 +1388,6 @@ print("__TESTS__:" + repr(_results))
     topic: "File I/O",
     difficulty: "advanced",
     type: "parsons",
-    code: "LBOA-X0S2",
     description: `Re-arrange the code blocks so the function searches a 2D list for an email address. It should return <code>True</code> if found, <code>False</code> otherwise.`,
     blocks: [
       "def search_email(email, users):",
@@ -1443,13 +1407,12 @@ print("__TESTS__:" + repr(_results))
     topic: "Binary & Hex",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-Y3T4",
     description: `Write a function <code>hex_to_denary(hex_in)</code> that takes a single hexadecimal digit (0–9 or A–F) and returns the denary equivalent. E.g. <code>hex_to_denary("A")</code> → <code>10</code>, <code>hex_to_denary("5")</code> → <code>5</code>`,
     starterCode: `def hex_to_denary(hex_in):
     hex_A_to_F = [["A","10"],["B","11"],["C","12"],["D","13"],["E","14"],["F","15"]]
     for count in range(len(hex_A_to_F)):
         if hex_in == hex_A_to_F[count][0]:
-            return int(hex_A_to_F[count][1])
+            pass  # TODO: return the denary equivalent from the list
     return int(hex_in)
 
 `,
@@ -1471,7 +1434,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Binary & Hex",
     difficulty: "advanced",
     type: "mcq",
-    code: "LBOA-Z5U6",
     description: `Study this quiz program and answer the questions.<br><br>
 <pre>def correct(score_in):
     print("Well Done!")
@@ -1520,13 +1482,12 @@ def quiz():
     topic: "Binary & Hex",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-A7V8",
     description: `Fix and complete the binary search function below. It should return the index of <code>target</code> in the sorted list <code>nums</code>, or <code>-1</code> if not found.<br><br>
 <em>Note: there is a bug in line 18 of the original — <code>nums[j+1] = nums[j]</code> should be <code>nums[j+1] = temp</code>.</em>`,
     starterCode: `def binarySearch(nums, target):
     left = 0
     right = len(nums) - 1
-    while left <= right:
+    while left < right:  # Bug on this line — fix it!
         mid = left + (right - left) // 2
         if nums[mid] == target:
             return mid
@@ -1556,7 +1517,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Binary & Hex",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-B9W0",
     description: `Extend the store discount program. Add a new discount code <code>"loyalty25"</code> worth 25% off to the 2D list. Then write the complete program logic so it correctly applies a discount if a valid code is entered.<br><br>
 <pre>discounts = [["summer10",0.1],["welcome",0.15],["refer20",0.2]]</pre>`,
     starterCode: `discounts = [["summer10",0.1],["welcome",0.15],["refer20",0.2],["loyalty25",0.25]]
@@ -1570,8 +1530,7 @@ if discount_in == "yes":
     valid = False
     for count in range(len(discounts)):
         if discountcode == discounts[count][0]:
-            discount = discounts[count][1]
-            valid = True
+            pass  # TODO: set the discount rate and mark valid = True
     if not valid:
         print("Invalid discount code")
 
@@ -1607,7 +1566,6 @@ print("__TESTS__:" + repr(_results))
     topic: "Sorting",
     difficulty: "advanced",
     type: "mcq",
-    code: "LBOA-C1X3",
     description: `Study this bubble sort snippet where <code>j=0</code> and <code>nums = [9,1,12,3,4,8]</code>:<br><br>
 <pre>if nums[j] > nums[j+1]:
     temp = nums[j]
@@ -1639,11 +1597,9 @@ print("__TESTS__:" + repr(_results))
     topic: "Binary & Hex",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-D2Y5",
     description: `Write a function <code>text_size(bits_char, num_char)</code> that returns the file size in bits (<code>bits_char × num_char</code>). Then write a <code>main()</code> function that asks for inputs, calls the function, and outputs the size in KB (bits ÷ 8000).`,
     starterCode: `def text_size(bits_char, num_char):
-    size = bits_char * num_char
-    return size
+    pass  # TODO: calculate and return the file size in bits (bits_char * num_char)
 
 def main():
     bits = int(input("Enter the number of bits per character: "))
@@ -1672,13 +1628,11 @@ print("__TESTS__:" + repr(_results))
     topic: "Sorting",
     difficulty: "advanced",
     type: "coding",
-    code: "LBOA-E4Z7",
     description: `Write a function <code>file_size(frequency, bits, duration)</code> that calculates a sound file size in bits using:<br><br>
 <code>file size = sample rate × bit depth × duration</code><br><br>
 Then write a <code>main()</code> that outputs the size in both KB and MB.`,
     starterCode: `def file_size(frequency, bits, duration):
-    size = frequency * bits * duration
-    return size
+    pass  # TODO: calculate and return the file size in bits (frequency * bits * duration)
 
 def main():
     freq = int(input("Enter the frequency in Hz: "))
@@ -1708,4 +1662,3 @@ print("__TESTS__:" + repr(_results))
   }
 ];
 
-const ALL_CODES = PROBLEMS.reduce((acc, p) => { acc[p.code] = p; return acc; }, {});

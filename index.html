@@ -17,36 +17,53 @@
 
 <!-- Main content (hidden until boot finishes) -->
 <div id="main-content" style="display:none">
-  <div class="page-wrap">
+  <div class="page-wrap index-layout">
 
-    <header class="site-header">
-      <h1>&#x2605; LBOA &#x2605;</h1>
-      <p class="subtitle">The Little Book of Algorithms &mdash; Python Pathway</p>
-      <p class="subtitle" style="margin-top:6px">
-        <a href="validate.html">[ VALIDATE CODES ]</a>
-      </p>
-    </header>
-
-    <!-- Progress -->
-    <div class="progress-area nes-container">
-      <div class="progress-label">
-        CODES COLLECTED: <span id="collected-count">0</span> / 48
+    <aside class="sidebar nes-container">
+      <div class="site-header sidebar-header">
+        <h1>&#x2605; LBOA &#x2605;</h1>
+        <p class="subtitle">The Little Book of Algorithms &mdash; Python Pathway</p>
       </div>
-      <progress id="progress-bar" class="nes-progress is-warning" value="0" max="48"></progress>
-    </div>
 
-    <!-- Problem list by topic -->
-    <div id="problem-list"></div>
+      <div class="progress-area">
+        <div class="progress-label">
+          CODES COLLECTED: <span id="collected-count">0</span> / 48
+        </div>
+        <progress id="progress-bar" class="nes-progress is-warning" value="0" max="48"></progress>
+      </div>
+
+      <div class="info-card">
+        <p class="panel-title">Lesson Hub</p>
+        <p>Select a lesson from the pathway and collect your secret code.</p>
+        <p>Completed challenges are marked with a ★ star.</p>
+        <a href="validate.html" class="nes-btn is-primary">VALIDATE CODES</a>
+      </div>
+
+      <div id="index-sound-btn" class="sound-panel"></div>
+    </aside>
+
+    <section class="lessons-panel nes-container">
+      <div class="lessons-header">
+        <div>
+          <h2>LESSON PATHWAY</h2>
+          <p class="subtitle">Choose a lesson to begin.</p>
+        </div>
+        <div class="lesson-summary">Navigate the right-hand lesson grid.</div>
+      </div>
+
+      <div id="problem-list" class="problem-list"></div>
+    </section>
 
   </div>
 </div>
 
 <script src="js/problems.js"></script>
 <script src="js/progress.js"></script>
+<script src="js/sounds.js"></script>
 <script>
   // ── Boot sequence ──
   const BOOT_LINES = [
-    "    **** LBOA ALGORITHMS TRAINER V2.01 ****",
+    "    **** VORMAMIM LBOA ALGORITHMS TRAINER V2.01 ****",
     "",
     " 48K RAM SYSTEM  38911 BASIC BYTES FREE",
     "",
@@ -98,10 +115,11 @@
       grid.className = "problem-grid";
 
       for (const p of group) {
-        const done = Progress.has(p.code);
+        const done = Progress.has(p.id);
         const a = document.createElement("a");
         a.href = `problem.html?id=${p.id}`;
         a.className = "problem-card" + (done ? " completed" : "");
+        a.addEventListener("click", () => Sounds.nav());
 
         const typeLabel = { coding: "CODE", mcq: "MCQ", trace: "TRACE", parsons: "SORT" };
 
@@ -119,6 +137,7 @@
     }
   }
 
+  Sounds.initBtn(document.getElementById('index-sound-btn'));
   runBoot();
 </script>
 </body>

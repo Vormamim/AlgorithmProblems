@@ -6,13 +6,44 @@
   <title>LBOA — Problem</title>
   <link rel="stylesheet" href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css">
   <link rel="stylesheet" href="css/theme.css">
+  <style>
+    body.challenge-page { font-size: 16px; }
+    body.challenge-page #problem-meta,
+    body.challenge-page .problem-description,
+    body.challenge-page .problem-description pre,
+    body.challenge-page .problem-description code,
+    body.challenge-page #code-editor,
+    body.challenge-page .terminal,
+    body.challenge-page .test-result-row,
+    body.challenge-page .test-msg,
+    body.challenge-page .mcq-question p,
+    body.challenge-page .q-badge,
+    body.challenge-page .mcq-option,
+    body.challenge-page .mcq-progress,
+    body.challenge-page .parsons-block,
+    body.challenge-page .breadcrumb,
+    body.challenge-page .sound-toggle,
+    body.challenge-page .loading-bar,
+    body.challenge-page .nav-direction,
+    body.challenge-page .nav-title,
+    body.challenge-page .dialog-close,
+    body.challenge-page .code-reveal p,
+    body.challenge-page .code-reveal .big-code {
+      font-size: 16px !important;
+    }
+    body.challenge-page .problem-description { line-height: 1.8; }
+    body.challenge-page .dialog-close { padding: 10px 12px; }
+    body.challenge-page .nav-btn { min-height: 64px; }
+    body.challenge-page .problem-layout { gap: 24px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
 </head>
-<body>
+<body class="challenge-page">
 <div class="page-wrap">
 
   <div class="breadcrumb">
-    <a href="index.html">[ HOME ]</a> &gt; <span id="breadcrumb-title">...</span>
+    <span class="breadcrumb-text"><a href="index.html">[ HOME ]</a> &gt; <span id="breadcrumb-title">...</span></span>
+    <button class="nes-btn" id="cheatsheet-btn" title="Open Python cheatsheet" style="margin-left: auto;">📚 HELP</button>
   </div>
 
   <div id="pyodide-status" class="loading-bar">
@@ -32,12 +63,18 @@
       <div class="editor-wrap">
         <div class="nes-container with-title">
           <p class="title">EDITOR</p>
-          <textarea id="code-editor" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+          <div class="editor-container">
+            <div class="line-numbers" id="line-numbers"></div>
+            <textarea id="code-editor" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+          </div>
         </div>
         <div class="btn-row">
           <button class="nes-btn is-primary" id="run-btn" disabled>▶ RUN</button>
           <button class="nes-btn" id="check-btn" disabled>✓ CHECK</button>
           <button class="nes-btn" id="reset-btn">↺ RESET</button>
+          <button class="nes-btn" id="copy-btn" title="Copy code to clipboard">📋 COPY</button>
+          <button class="nes-btn" id="save-btn" title="Save code to local storage">💾 SAVE</button>
+          <button class="nes-btn" id="load-btn" title="Load saved code">📂 LOAD</button>
         </div>
       </div>
       <div class="editor-wrap">
@@ -88,11 +125,12 @@
   <!-- Code reveal dialog -->
   <dialog id="code-dialog" class="nes-dialog">
     <form method="dialog">
+      <button class="dialog-close" aria-label="Close">&#x2715;</button>
       <div class="code-reveal">
         <p style="font-size:10px; color:var(--success); text-shadow:0 0 8px var(--success)">
           &#x2605; CHALLENGE COMPLETE &#x2605;
         </p>
-        <p style="font-size:8px; margin-top:12px">YOUR CODE IS:</p>
+        <p style="font-size:8px; margin-top:12px; color:var(--amber-dim)">YOUR CODE IS:</p>
         <span class="big-code" id="revealed-code"></span>
         <p style="font-size:7px; color:var(--amber-dim)">Write it down or take a screenshot!</p>
         <div class="btn-row" style="justify-content:center; margin-top:16px; gap:12px">
@@ -104,19 +142,147 @@
     </form>
   </dialog>
 
+  <!-- Fail dialog -->
+  <dialog id="fail-dialog" class="nes-dialog">
+    <form method="dialog">
+      <button class="dialog-close" aria-label="Close">&#x2715;</button>
+      <div class="code-reveal">
+        <p style="font-size:10px; color:var(--error); text-shadow:0 0 8px var(--error)">
+          &#x2715; NOT QUITE
+        </p>
+        <p id="fail-score" style="font-size:13px; margin:16px 0; color:var(--amber-glow); letter-spacing:2px"></p>
+        <p style="font-size:7px; color:var(--amber-dim)">Check the terminal output and try again!</p>
+        <div class="btn-row" style="justify-content:center; margin-top:16px">
+          <button class="nes-btn is-error">&#x21BA; TRY AGAIN</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Save code dialog -->
+  <dialog id="save-dialog" class="nes-dialog">
+    <form method="dialog">
+      <button class="dialog-close" aria-label="Close">&#x2715;</button>
+      <div class="code-reveal">
+        <p style="font-size:10px; color:var(--success); text-shadow:0 0 8px var(--success)">
+          &#x2713; SAVE CODE
+        </p>
+        <p style="font-size:8px; margin:12px 0; color:var(--amber-dim)">Enter filename (will be saved as .py):</p>
+        <input type="text" id="save-name-input" class="save-input" placeholder="e.g. my-solution" autofocus>
+        <div class="btn-row" style="justify-content:center; margin-top:16px; gap:8px">
+          <button type="button" class="nes-btn is-success" id="save-confirm-btn">&#x2713; DOWNLOAD</button>
+          <button type="button" class="nes-btn" id="save-cancel-btn">CANCEL</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+
+
   <!-- Bottom prev/next navigation -->
   <nav class="problem-nav" id="problem-nav" aria-label="Problem navigation"></nav>
+
+  <!-- Cheatsheet Modal -->
+  <dialog id="cheatsheet-dialog" class="nes-dialog cheatsheet-modal">
+    <div class="cheatsheet-header">
+      <h2>📚 PYTHON CHEATSHEET</h2>
+      <button class="dialog-close" aria-label="Close dialog" onclick="document.getElementById('cheatsheet-dialog').close()">✕</button>
+    </div>
+    <div id="cheatsheet-content" class="cheatsheet-content">
+      <div class="nes-container with-title">
+        <p class="title">Quick Reference</p>
+        <div class="cheatsheet-section">
+          <h3>Variables & Types</h3>
+          <pre>x = 5              # int
+y = 3.14          # float
+s = "hello"       # string
+b = True          # bool
+l = [1, 2, 3]     # list
+d = {"a": 1}      # dict</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>String Methods</h3>
+          <pre>s.upper()          # "HELLO"
+s.lower()          # "hello"
+s.strip()          # remove whitespace
+s.split(",")       # split by comma
+s.find("ll")       # find index
+len(s)             # length</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>List Methods</h3>
+          <pre>l.append(4)        # add item
+l.remove(2)        # remove item
+l.pop()            # remove last
+l.sort()           # sort list
+len(l)             # length
+l[0]               # first element
+l[-1]              # last element</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>Control Flow</h3>
+          <pre>if x > 5:
+    print("big")
+elif x == 5:
+    print("medium")
+else:
+    print("small")
+
+for i in range(5):
+    print(i)
+
+while x > 0:
+    x -= 1</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>Functions</h3>
+          <pre>def greet(name):
+    return f"Hello {name}"
+
+result = greet("Alice")
+
+default args:
+def func(x, y=10):
+    return x + y</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>Dictionary Methods</h3>
+          <pre>d = {"name": "Bob", "age": 25}
+d["name"]          # "Bob"
+d.get("age")       # 25
+d.keys()           # dict_keys
+d.values()         # dict_values
+d.items()          # key-value pairs</pre>
+        </div>
+        <div class="cheatsheet-section">
+          <h3>Common Functions</h3>
+          <pre>len(x)             # length
+range(5)           # 0,1,2,3,4
+sum([1,2,3])       # 6
+min([3,1,2])       # 1
+max([3,1,2])       # 3
+type(x)            # type of x
+int("5")           # convert to int
+str(42)            # convert to string</pre>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
 </div>
 
 <script src="js/problems.js"></script>
 <script src="js/progress.js"></script>
+<script src="js/codes.js"></script>
+<script src="js/sounds.js"></script>
 <script src="js/runner.js"></script>
 <script>
   // ── Load problem from URL ──
   const params = new URLSearchParams(location.search);
   const problemId = params.get("id");
   const problem = PROBLEMS.find(p => p.id === problemId);
+
+  Sounds.initBtn(document.querySelector('.breadcrumb'));
 
   if (!problem) {
     document.getElementById("problem-heading").textContent = "Problem not found";
@@ -134,7 +300,7 @@
       `<span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>&nbsp;
        <span class="badge type">${typeLabel[p.type] || p.type.toUpperCase()}</span>&nbsp;
        <span style="color:var(--amber-dim)">${p.topic}</span>
-       ${Progress.has(p.code) ? '&nbsp;<span style="color:var(--amber)">&#x2605; COMPLETED</span>' : ''}`;
+       ${Progress.has(p.id) ? '&nbsp;<span style="color:var(--amber)">&#x2605; COMPLETED</span>' : ''}`;
 
     document.getElementById("problem-description").innerHTML = p.description;
 
@@ -147,6 +313,26 @@
     }
 
     initNav(p);
+
+    // Initialize cheatsheet for all problem types
+    const cheatsheetBtn = document.getElementById("cheatsheet-btn");
+    const cheatsheetDialog = document.getElementById("cheatsheet-dialog");
+    if (cheatsheetBtn && cheatsheetDialog) {
+      // Remove old listeners if any
+      const newBtn = cheatsheetBtn.cloneNode(true);
+      cheatsheetBtn.parentNode.replaceChild(newBtn, cheatsheetBtn);
+      newBtn.addEventListener("click", () => {
+        Sounds.blip();
+        cheatsheetDialog.showModal();
+      });
+      
+      // Close on backdrop click
+      cheatsheetDialog.addEventListener("click", (e) => {
+        if (e.target === cheatsheetDialog) {
+          cheatsheetDialog.close();
+        }
+      });
+    }
   }
 
   // ── Prev / Next navigation ──
@@ -190,11 +376,16 @@
       dialogNext.textContent = "HOME";
     }
 
+    // Nav button sounds
+    nav.querySelectorAll('a.nav-btn').forEach(a =>
+      a.addEventListener('click', () => Sounds.nav()));
+    document.getElementById('dialog-next-btn').addEventListener('click', () => Sounds.nav());
+
     // Keyboard shortcuts: ← → (only when not typing in editor/textarea)
     document.addEventListener("keydown", e => {
       if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
-      if (e.key === "ArrowLeft"  && prev) location.href = problemUrl(prev);
-      if (e.key === "ArrowRight" && next) location.href = problemUrl(next);
+      if (e.key === "ArrowLeft"  && prev) { Sounds.nav(); location.href = problemUrl(prev); }
+      if (e.key === "ArrowRight" && next) { Sounds.nav(); location.href = problemUrl(next); }
     });
   }
 
@@ -206,9 +397,24 @@
     const savedKey = `lboa_code_${p.id}`;
     editor.value = localStorage.getItem(savedKey) || p.starterCode || "";
 
+    function updateLineNumbers() {
+      const lines = editor.value.split('\n').length;
+      const lineNumbersDiv = document.getElementById('line-numbers');
+      lineNumbersDiv.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
+    }
+
     editor.addEventListener("input", () => {
       localStorage.setItem(savedKey, editor.value);
+      updateLineNumbers();
     });
+
+    // Sync scroll position between editor and line numbers
+    editor.addEventListener("scroll", () => {
+      const lineNumbersDiv = document.getElementById('line-numbers');
+      lineNumbersDiv.scrollTop = editor.scrollTop;
+    });
+
+    updateLineNumbers();
 
     // Tab key inserts spaces
     editor.addEventListener("keydown", e => {
@@ -232,6 +438,7 @@
     });
 
     runBtn.addEventListener("click", async () => {
+      Sounds.blip();
       runBtn.disabled = true;
       clearTerminal();
       writeTerminal("▶ RUN\n", "t-prompt");
@@ -240,6 +447,7 @@
     });
 
     checkBtn.addEventListener("click", async () => {
+      Sounds.blip();
       checkBtn.disabled = true;
       runBtn.disabled = true;
       clearTerminal();
@@ -251,7 +459,9 @@
       checkBtn.disabled = false;
 
       if (!results) {
-        writeTerminal("\n[ERR] Could not run tests. Check your code for syntax errors.\n", "t-error");
+        Sounds.fail();
+        writeTerminal("\n[ERR] Could not run tests — check for syntax errors.\n", "t-error");
+        showFailModal("CODE ERROR");
         return;
       }
 
@@ -260,12 +470,95 @@
 
     resetBtn.addEventListener("click", () => {
       if (confirm("Reset code to starter template?")) {
+        Sounds.nav();
         editor.value = p.starterCode || "";
         localStorage.removeItem(`lboa_code_${p.id}`);
         clearTerminal();
         writeTerminal("READY.", "t-prompt");
         document.getElementById("test-results").innerHTML = "";
       }
+    });
+
+    // ── Copy button ──
+    const copyBtn = document.getElementById("copy-btn");
+    copyBtn.addEventListener("click", () => {
+      Sounds.blip();
+      navigator.clipboard.writeText(editor.value).then(() => {
+        const origText = copyBtn.textContent;
+        copyBtn.textContent = "✓ COPIED";
+        setTimeout(() => { copyBtn.textContent = origText; }, 2000);
+      }).catch(() => {
+        copyBtn.textContent = "✗ FAILED";
+        setTimeout(() => { copyBtn.textContent = "📋 COPY"; }, 2000);
+      });
+    });
+
+    // ── Save button (download file) ──
+    const saveBtn = document.getElementById("save-btn");
+    const saveDialog = document.getElementById("save-dialog");
+    const saveNameInput = document.getElementById("save-name-input");
+    const saveConfirmBtn = document.getElementById("save-confirm-btn");
+    const saveCancelBtn = document.getElementById("save-cancel-btn");
+
+    saveBtn.addEventListener("click", () => {
+      Sounds.blip();
+      saveNameInput.value = `${p.id}_solution`;
+      saveNameInput.focus();
+      saveNameInput.select();
+      saveDialog.showModal();
+    });
+
+    saveConfirmBtn.addEventListener("click", () => {
+      const filename = saveNameInput.value.trim();
+      if (!filename) {
+        saveNameInput.style.borderColor = "var(--error)";
+        setTimeout(() => { saveNameInput.style.borderColor = "var(--border)"; }, 1000);
+        return;
+      }
+      const blob = new Blob([editor.value], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${filename}.py`;
+      link.click();
+      URL.revokeObjectURL(url);
+      saveDialog.close();
+      Sounds.success();
+      saveBtn.textContent = "✓ SAVED";
+      setTimeout(() => { saveBtn.textContent = "💾 SAVE"; }, 1500);
+    });
+
+    saveCancelBtn.addEventListener("click", () => {
+      saveDialog.close();
+    });
+
+    // ── Load button (upload file) ──
+    const loadBtn = document.getElementById("load-btn");
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".py,.txt";
+    fileInput.style.display = "none";
+    document.body.appendChild(fileInput);
+
+    loadBtn.addEventListener("click", () => {
+      Sounds.blip();
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target.result;
+        editor.value = content;
+        localStorage.setItem(savedKey, editor.value);
+        Sounds.success();
+        loadBtn.textContent = "✓ LOADED";
+        setTimeout(() => { loadBtn.textContent = "📂 LOAD"; }, 1500);
+      };
+      reader.readAsText(file);
+      fileInput.value = "";
     });
   }
 
@@ -282,35 +575,57 @@
     term.scrollTop = term.scrollHeight;
   }
 
+  function showFailModal(scoreText) {
+    document.getElementById("test-results").innerHTML = "";
+    document.getElementById("fail-score").textContent = scoreText;
+    document.getElementById("fail-dialog").showModal();
+  }
+
   function renderTestResults(results, p) {
     const container = document.getElementById("test-results");
-    let allPass = true;
     container.innerHTML = "";
 
+    // Empty or malformed results = failure (prevents free code reveal when testCode produces no output)
+    if (!Array.isArray(results) || results.length === 0) {
+      Sounds.fail();
+      writeTerminal("\n[ERR] No test results — check for syntax errors.\n", "t-error");
+      showFailModal("0 / 0 PASSED");
+      return;
+    }
+
+    let passing = 0;
     for (const [name, pass, msg] of results) {
-      if (!pass) allPass = false;
+      const passFlag = pass === true;
+      if (passFlag) passing++;
       const row = document.createElement("div");
-      row.className = "test-result-row " + (pass ? "test-pass" : "test-fail");
+      row.className = "test-result-row " + (passFlag ? "test-pass" : "test-fail");
       row.innerHTML = `
-        <span class="test-icon">${pass ? "✓" : "✗"}</span>
+        <span class="test-icon">${passFlag ? "✓" : "✗"}</span>
         <div>
           <div class="test-name">${escHtml(name)}</div>
-          ${!pass ? `<div class="test-msg">${escHtml(msg)}</div>` : ""}
+          ${!passFlag ? `<div class="test-msg">${escHtml(msg)}</div>` : ""}
         </div>`;
       container.appendChild(row);
     }
 
-    if (allPass) {
+    const allPassed = results.length > 0 && passing === results.length;
+    if (allPassed) {
+      Sounds.success();
       writeTerminal("\n★ ALL TESTS PASSED!\n", "t-success");
       revealCode(p);
     } else {
-      writeTerminal("\nSome tests failed. Keep going!\n", "t-error");
+      Sounds.fail();
+      writeTerminal(`\n${passing} / ${results.length} tests passed — keep going!\n`, "t-error");
+      showFailModal(`${passing} / ${results.length} PASSED`);
     }
   }
 
-  function revealCode(p) {
-    Progress.collect(p.code);
-    document.getElementById("revealed-code").textContent = p.code;
+  async function revealCode(p) {
+    document.getElementById("test-results").innerHTML = "";
+    Sounds.fanfare();
+    const code = await Codes.forProblem(p.id);
+    Progress.collect(p.id, code);
+    document.getElementById("revealed-code").textContent = code;
     document.getElementById("code-dialog").showModal();
   }
 
@@ -323,7 +638,7 @@
     p.questions.forEach((q, qi) => {
       const div = document.createElement("div");
       div.className = "mcq-question";
-      div.innerHTML = `<p>${qi + 1}. ${q.q}</p>`;
+      div.innerHTML = `<p><span class="q-badge">○</span>&nbsp;Q${qi + 1}. ${q.q}</p>`;
       q.options.forEach((opt, oi) => {
         const label = document.createElement("label");
         label.className = "mcq-option";
@@ -336,34 +651,65 @@
       container.appendChild(document.createElement("hr"));
     });
 
-    document.getElementById("mcq-submit").addEventListener("click", () => {
-      let allCorrect = true;
-      p.questions.forEach((q, qi) => {
-        const selected = document.querySelector(`input[name="q${qi}"]:checked`);
-        const options = document.querySelectorAll(`input[name="q${qi}"]`);
-        options.forEach(opt => {
-          const label = opt.parentElement;
-          label.classList.remove("correct", "wrong");
-          if (parseInt(opt.value) === q.answer) {
-            label.classList.add("correct");
-          } else if (opt.checked && parseInt(opt.value) !== q.answer) {
-            label.classList.add("wrong");
-            allCorrect = false;
-          }
-        });
-        if (!selected) allCorrect = false;
-      });
+    // Live progress counter
+    const progressEl = document.createElement("p");
+    progressEl.id = "mcq-progress";
+    document.querySelector("#mcq-section .btn-row").insertAdjacentElement("beforebegin", progressEl);
 
-      if (allCorrect) {
-        revealCode(p);
-      } else {
-        const btn = document.getElementById("mcq-submit");
-        btn.textContent = "✗ TRY AGAIN";
+    function updateProgress() {
+      const done = p.questions.filter((_, qi) =>
+        document.querySelector(`input[name="q${qi}"]:checked`)).length;
+      const total = p.questions.length;
+      progressEl.textContent = `${done} / ${total} answered`;
+      progressEl.className = done === total ? "mcq-progress done" : "mcq-progress";
+    }
+
+    container.querySelectorAll("input[type=radio]").forEach(r =>
+      r.addEventListener("change", () => { Sounds.select(); updateProgress(); }));
+
+    updateProgress();
+
+    document.getElementById("mcq-submit").addEventListener("click", () => {
+      const btn = document.getElementById("mcq-submit");
+
+      // Guard: require every question to be answered before revealing anything
+      const missing = p.questions
+        .map((_, qi) => document.querySelector(`input[name="q${qi}"]:checked`) ? null : qi + 1)
+        .filter(n => n !== null);
+
+      if (missing.length > 0) {
+        Sounds.fail();
+        const label = missing.length === 1
+          ? `ANSWER Q${missing[0]} FIRST`
+          : `ANSWER Q${missing.join(" & Q")} FIRST`;
+        btn.textContent = `✗ ${label}`;
         btn.className = "nes-btn is-error";
         setTimeout(() => {
           btn.textContent = "✓ SUBMIT";
           btn.className = "nes-btn is-primary";
-        }, 1500);
+        }, 2000);
+        return;
+      }
+
+      // All answered — count correct without revealing which
+      const score = p.questions.filter((q, qi) => {
+        const sel = document.querySelector(`input[name="q${qi}"]:checked`);
+        return sel && parseInt(sel.value) === q.answer;
+      }).length;
+
+      if (score === p.questions.length) {
+        revealCode(p);
+      } else {
+        Sounds.fail();
+        // Clear all selections so student starts fresh
+        container.querySelectorAll("input[type=radio]").forEach(r => r.checked = false);
+        updateProgress();
+        btn.textContent = `✗ ${score}/${p.questions.length} — TRY AGAIN`;
+        btn.className = "nes-btn is-error";
+        setTimeout(() => {
+          btn.textContent = "✓ SUBMIT";
+          btn.className = "nes-btn is-primary";
+        }, 2000);
       }
     });
   }
@@ -435,6 +781,7 @@
           } else {
             slotContents[toSlot] = idx;
           }
+          Sounds.select();
           renderBank();
           renderSlots();
         });
@@ -466,7 +813,12 @@
         fb.innerHTML = '<span style="color:var(--success)">★ CORRECT ORDER!</span>';
         revealCode(p);
       } else {
-        fb.innerHTML = '<span style="color:var(--error)">Not quite — try again!</span>';
+        Sounds.fail();
+        // Reset all blocks back to the bank — no hints about which were right
+        slotContents = new Array(p.blocks.length).fill(null);
+        renderBank();
+        renderSlots();
+        fb.innerHTML = '<span style="color:var(--error)">✗ Not quite — try again!</span>';
       }
     });
 

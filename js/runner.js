@@ -87,7 +87,7 @@ ${testCode}
   }
 
   const marker = "__TESTS__:";
-  const markerIdx = rawOutput.indexOf(marker);
+  const markerIdx = rawOutput.lastIndexOf(marker);
   if (markerIdx === -1) {
     onOutput(rawOutput);
     return null;
@@ -99,6 +99,10 @@ ${testCode}
   const testLine = rawOutput.slice(markerIdx + marker.length).split("\n")[0].trim();
   try {
     const results = eval(testLine.replace(/True/g, "true").replace(/False/g, "false"));
+    if (!Array.isArray(results)) {
+      onOutput("[ERR] Invalid test result format\n");
+      return null;
+    }
     return results;
   } catch {
     onOutput("[ERR] Could not parse test results\n");

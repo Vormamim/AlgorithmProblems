@@ -11,7 +11,7 @@
 <div class="page-wrap">
 
   <div class="breadcrumb">
-    <a href="index.html">[ HOME ]</a> &gt; VALIDATE CODES
+    <span class="breadcrumb-text"><a href="index.html">[ HOME ]</a> &gt; VALIDATE CODES</span>
   </div>
 
   <div class="nes-container with-title" style="margin-bottom:24px">
@@ -29,7 +29,7 @@
     </p>
     <textarea
       id="validate-input"
-      placeholder="LBOA-F1A2&#10;LBOA-G3B4&#10;LBOA-H5C6"
+      placeholder="LBOA-XXXX-XXXX&#10;LBOA-XXXX-XXXX"
     ></textarea>
     <div class="btn-row" style="margin-top:12px">
       <button class="nes-btn is-primary" id="validate-btn">✓ VALIDATE</button>
@@ -43,12 +43,13 @@
 <script src="js/problems.js"></script>
 <script src="js/progress.js"></script>
 <script src="js/codes.js"></script>
+<script src="js/sounds.js"></script>
 <script>
   // ── Show own collected codes ──
-  function renderMyСodes() {
+  function renderMyCodes() {
     const area = document.getElementById("my-codes-area");
-    const all = Progress.getAll();
-    const collected = PROBLEMS.filter(p => all[p.code]);
+    const all = Progress.getAll();  // {problemId: code}
+    const collected = PROBLEMS.filter(p => all[p.id]);
 
     if (collected.length === 0) {
       area.innerHTML = `<p style="font-size:8px;color:var(--amber-dim)">No codes collected yet. Go solve some problems!</p>`;
@@ -58,15 +59,14 @@
     let html = `<p style="font-size:8px;color:var(--amber-dim);margin-bottom:12px">${collected.length} / 48 collected</p>`;
     html += `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">`;
     for (const p of collected) {
-      html += `<span style="font-size:8px;border:1px solid var(--amber);padding:4px 8px;color:var(--amber-glow)">${p.code}</span>`;
+      html += `<span style="font-size:8px;border:1px solid var(--amber);padding:4px 8px;color:var(--amber-glow)">${all[p.id]}</span>`;
     }
     html += `</div>`;
     html += `<div class="validate-results">`;
     for (const p of collected) {
-      const typeLabel = { coding:"CODE", mcq:"MCQ", trace:"TRACE", parsons:"SORT" };
       html += `
         <div class="validate-row">
-          <span class="v-code">${p.code}</span>
+          <span class="v-code">${all[p.id]}</span>
           <span class="v-title">CH${String(p.num).padStart(2,"0")}: ${p.title}</span>
           <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
           <span class="v-ok">★</span>
@@ -81,7 +81,7 @@
     area.innerHTML = html;
 
     document.getElementById("copy-btn").addEventListener("click", () => {
-      const codes = collected.map(p => p.code).join("\n");
+      const codes = collected.map(p => all[p.id]).join("\n");
       navigator.clipboard.writeText(codes).then(() => {
         document.getElementById("copy-btn").textContent = "✓ COPIED!";
         setTimeout(() => document.getElementById("copy-btn").textContent = "⊘ COPY ALL CODES", 2000);
@@ -91,24 +91,36 @@
     document.getElementById("reset-progress-btn").addEventListener("click", () => {
       if (confirm("Delete ALL collected codes? This cannot be undone.")) {
         Progress.clear();
-        renderMyСodes();
+        renderMyCodes();
       }
     });
   }
 
   // ── Teacher validator ──
-  document.getElementById("validate-btn").addEventListener("click", () => {
+  Sounds.initBtn(document.querySelector('.breadcrumb'));
+
+  document.getElementById("validate-btn").addEventListener("click", async () => {
+    Sounds.blip();
+    const btn = document.getElementById("validate-btn");
+    btn.disabled = true;
+    btn.textContent = "CHECKING...";
+
     const input = document.getElementById("validate-input").value;
-    const results = Codes.validate(input);
+    const results = await Codes.validate(input);
     const container = document.getElementById("validate-results");
+
+    btn.disabled = false;
+    btn.textContent = "✓ VALIDATE";
+
+    const valid = results.filter(r => r.valid);
+    const invalid = results.filter(r => !r.valid);
+
+    if (valid.length > 0) Sounds.success(); else if (results.length > 0) Sounds.fail();
 
     if (results.length === 0) {
       container.innerHTML = `<p style="font-size:8px;color:var(--amber-dim);margin-top:12px">No codes entered.</p>`;
       return;
     }
-
-    const valid = results.filter(r => r.valid);
-    const invalid = results.filter(r => !r.valid);
 
     let html = `<p style="font-size:8px;color:var(--amber-dim);margin:12px 0">
       Found <span style="color:var(--success)">${valid.length} valid</span>
@@ -119,10 +131,9 @@
       html += `<div style="margin-bottom:8px;font-size:8px;color:var(--amber)">COMPLETED CHALLENGES:</div>`;
       for (const r of valid) {
         const p = r.problem;
-        const typeLabel = { coding:"CODE", mcq:"MCQ", trace:"TRACE", parsons:"SORT" };
         html += `
           <div class="validate-row">
-            <span class="v-code">${p.code}</span>
+            <span class="v-code">${r.code}</span>
             <span class="v-title">CH${String(p.num).padStart(2,"0")}: ${p.title}</span>
             <span class="badge ${p.difficulty}">${p.difficulty.toUpperCase()}</span>
             <span class="v-ok">&#x2713;</span>
@@ -150,7 +161,7 @@
     document.getElementById("validate-results").innerHTML = "";
   });
 
-  renderMyСodes();
+  renderMyCodes();
 </script>
 </body>
 </html>
